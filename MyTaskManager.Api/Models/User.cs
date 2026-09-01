@@ -1,4 +1,6 @@
-﻿namespace MyTaskManager.Api.Models
+﻿using MyTaskManager.Common.Models;
+
+namespace MyTaskManager.Api.Models
 {
     public class User
     {
@@ -11,10 +13,10 @@
         public DateTime RegistrationDate { get; set; }
         public DateTime LastLoginDate { get; set; }
         public byte[] Photo { get; set; }
+        public UserStatus Status { get; set; }
         public List<Project> Projects { get; set; } = new List<Project>();
         public List<Desk> Desks { get; set; } = new List<Desk>();
         public List<TaskModel> Tasks { get; set; } = new List<TaskModel>();
-        public UserStatus Status { get; set; }
 
         public User() { }
 
@@ -29,6 +31,21 @@
             Phone = phone;
             Photo = photo;
             RegistrationDate = DateTime.Now;
+        }
+
+        public UserDto ToUserDto()
+        {
+            return new UserDto()
+            {
+                FirstName = this.FirstName,
+                LastName = this.LastName,
+                Email = this.Email,
+                Password = this.Password,
+                Status = this.Status,
+                Phone = this.Phone,
+                Photo = this.Photo,
+                RegistrationDate = this.RegistrationDate
+            };
         }
     }
 }
