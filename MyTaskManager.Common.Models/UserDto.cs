@@ -16,7 +16,7 @@ namespace MyTaskManager.Common.Models
         public string Phone { get; set; } = string.Empty;
         public DateTime RegistrationDate { get; set; }
         public DateTime LastLoginDate { get; set; }
-        public byte[] Photo { get; set; }
+        public byte[]? Photo { get; set; }
         public UserStatus Status { get; set; }
 
         public UserDto(string fname, string lname, string email, string password,
