@@ -9,10 +9,10 @@ namespace MyTaskManager.Api.Models
         public string LastName { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        public string Phone { get; set; } = string.Empty;
+        public string? Phone { get; set; }
         public DateTime RegistrationDate { get; set; }
         public DateTime LastLoginDate { get; set; }
-        public byte[] Photo { get; set; }
+        public byte[]? Photo { get; set; }
         public UserStatus Status { get; set; }
         public List<Project> Projects { get; set; } = new List<Project>();
         public List<Desk> Desks { get; set; } = new List<Desk>();
@@ -33,10 +33,23 @@ namespace MyTaskManager.Api.Models
             RegistrationDate = DateTime.Now;
         }
 
+        public User(UserDto userDto)
+        {
+            FirstName = userDto.FirstName;
+            LastName = userDto.LastName;
+            Email = userDto.Email;
+            Password = userDto.Password;
+            Status = userDto.Status;
+            Phone = userDto.Phone;
+            Photo = userDto.Photo;
+            RegistrationDate = DateTime.Now;
+        }
+
         public UserDto ToUserDto()
         {
             return new UserDto()
             {
+                Id = this.Id,
                 FirstName = this.FirstName,
                 LastName = this.LastName,
                 Email = this.Email,
