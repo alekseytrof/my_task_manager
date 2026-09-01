@@ -18,6 +18,12 @@ namespace MyTaskManager.Api.Controllers
             _db = db;
         }
 
+        [HttpGet]
+        public async Task<IEnumerable<UserDto>> GetUsers()
+        {
+            return await _db.Users.Select(u => u.ToUserDto()).ToArrayAsync();
+        }
+
         [HttpPost("create")]
         public IActionResult CreateUser([FromBody] UserDto userModel)
         {
@@ -68,12 +74,6 @@ namespace MyTaskManager.Api.Controllers
                 return Ok();
             }
             return NotFound("Пользователь не найден");
-        }
-
-        [HttpGet]
-        public async Task<IEnumerable<UserDto>> GetUsers()
-        {
-            return await _db.Users.Select(u => u.ToUserDto()).ToArrayAsync();
         }
 
         [HttpPost("create/all")]
