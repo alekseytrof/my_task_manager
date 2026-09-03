@@ -1,4 +1,4 @@
-﻿namespace MyTaskManager.Api.Models
+﻿namespace MyTaskManager.Common.Models
 {
     public enum ProjectStatus
     {

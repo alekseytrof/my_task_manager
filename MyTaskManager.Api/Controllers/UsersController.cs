@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using MyTaskManager.Api.Models;
 using MyTaskManager.Api.Models.Data;
 using MyTaskManager.Api.Models.Services;
 using MyTaskManager.Common.Models;
@@ -16,12 +13,12 @@ namespace MyTaskManager.Api.Controllers
     public class UsersController : ControllerBase
     {
         private readonly ApplicationContext _db;
-        private readonly UserService _userService;
+        private readonly UsersService _usersService;
 
         public UsersController(ApplicationContext db)
         {
             _db = db;
-            _userService = new UserService(db);
+            _usersService = new UsersService(db);
         }
 
         [HttpGet]
@@ -35,7 +32,7 @@ namespace MyTaskManager.Api.Controllers
         {
             if (userModel != null)
             {
-                bool result = _userService.Create(userModel);
+                bool result = _usersService.Create(userModel);
                 return result ? Ok() : NotFound();
             }
             return BadRequest();
@@ -46,7 +43,7 @@ namespace MyTaskManager.Api.Controllers
         {
             if (userModel != null)
             {
-                bool result = _userService.Update(id, userModel);
+                bool result = _usersService.Update(id, userModel);
                 return result ? Ok() : NotFound();
             }
             return BadRequest();
@@ -55,7 +52,7 @@ namespace MyTaskManager.Api.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteUser(int id)
         {
-            bool result = _userService.Delete(id);
+            bool result = _usersService.Delete(id);
             return result ? Ok() : NotFound();
         }
 
@@ -64,7 +61,7 @@ namespace MyTaskManager.Api.Controllers
         {
             if (users != null && users.Count > 1)
             {
-                bool result = _userService.CreateMultiplyUsers(users);
+                bool result = _usersService.CreateMultiplyUsers(users);
                 return result ? Ok() : BadRequest();
             }
             return BadRequest();

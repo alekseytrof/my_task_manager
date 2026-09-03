@@ -1,4 +1,6 @@
-﻿namespace MyTaskManager.Api.Models
+﻿using MyTaskManager.Common.Models;
+
+namespace MyTaskManager.Api.Models
 {
     public abstract class CommonObject
     {
@@ -10,6 +12,14 @@
         public CommonObject()
         {
             CreationDate = DateTime.Now;
+        }
+
+        public CommonObject(ProjectDto projectDto)
+        {
+            Name = projectDto.Name;
+            Description = projectDto.Description;
+            Photo = projectDto.Photo;
+            CreationDate = projectDto.CreationDate;
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using MyTaskManager.Api.Models.Abstractions;
+﻿using MyTaskManager.Api.Models.Abstractions;
 using MyTaskManager.Api.Models.Data;
 using MyTaskManager.Common.Models;
 using System.Security.Claims;
@@ -7,11 +6,11 @@ using System.Text;
 
 namespace MyTaskManager.Api.Models.Services
 {
-    public class UserService : ICommonService<UserDto>
+    public class UsersService : AbstractionService, ICommonService<UserDto>
     {
         private readonly ApplicationContext _db;
 
-        public UserService(ApplicationContext db)
+        public UsersService(ApplicationContext db)
         {
             _db = db;
         }
@@ -37,6 +36,12 @@ namespace MyTaskManager.Api.Models.Services
         public User GetUser(string login, string password)
         {
             var user = _db.Users.FirstOrDefault(u => u.Email == login && u.Password == password);
+            return user;
+        }
+
+        public User GetUser(string login)
+        {
+            var user = _db.Users.FirstOrDefault(u => u.Email == login);
             return user;
         }
 
@@ -119,19 +124,6 @@ namespace MyTaskManager.Api.Models.Services
                 _db.Users.AddRange(newUsers);
                 _db.SaveChangesAsync();
             });
-        }
-
-        private bool DoAction(Action action)
-        {
-            try
-            {
-                action.Invoke();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
         }
     }
 }
