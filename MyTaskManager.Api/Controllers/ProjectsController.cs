@@ -25,9 +25,31 @@ namespace MyTaskManager.Api.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IEnumerable<ProjectDto>> Get(ProjectDto projectDto)
         {
             return await _db.Project.Select(p => p.ToProjectDto()).ToArrayAsync();
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult Get(int id)
+        {
+            var project = _projectsService.Get(id);
+            return project == null ? NoContent() : Ok(project);
+        }
+
+        [HttpGet]
+        public async Task<IEnumerable<ProjectDto>> Get()
+        {
+            var user = _usersService.GetUser(HttpContext.User.Identity.Name);
+            if (user.Status == UserStatus.Admin)
+            {
+                return await _projectsService.GetAll().ToListAsync();
+            }
+            else
+            {
+                return await _projectsService.GetByUserId(user.Id);
+            }
         }
 
         [HttpPost]
@@ -38,17 +60,21 @@ namespace MyTaskManager.Api.Controllers
                 var user = _usersService.GetUser(HttpContext.User.Identity.Name);
                 if (user != null)
                 {
-                    var admin = _db.ProjectAdmins.FirstOrDefault(a => a.Id == user.Id);
-                    if (admin == null)
+                    if (user.Status == UserStatus.Admin || user.Status == UserStatus.Editor)
                     {
-                        admin = new ProjectAdmin(user);
-                        _db.ProjectAdmins.Add(admin);
-                    }
-                    projectDto.Id = admin.Id;
-                }
+                        var admin = _db.ProjectAdmins.FirstOrDefault(a => a.UserId == user.Id);
+                        if (admin == null)
+                        {
+                            admin = new ProjectAdmin(user);
+                            _db.ProjectAdmins.Add(admin);
+                        }
+                        projectDto.AdminId = admin.Id;
 
-                bool result = _projectsService.Create(projectDto);
-                return result ? Ok() : NotFound();
+                        bool result = _projectsService.Create(projectDto);
+                        return result ? Ok() : NotFound();
+                    }
+                    return Unauthorized();
+                }
             }
             return BadRequest();
         }
@@ -58,8 +84,16 @@ namespace MyTaskManager.Api.Controllers
         {
             if (projectDto != null)
             {
-                bool result = _projectsService.Update(id, projectDto);
-                return result ? Ok() : NotFound();
+                var user = _usersService.GetUser(HttpContext.User.Identity.Name);
+                if (user != null)
+                {
+                    if (user.Status == UserStatus.Admin || user.Status == UserStatus.Editor)
+                    {
+                        bool result = _projectsService.Update(id, projectDto);
+                        return result ? Ok() : NotFound();
+                    }
+                    return Unauthorized();
+                }
             }
             return BadRequest();
         }
@@ -67,8 +101,54 @@ namespace MyTaskManager.Api.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            bool result = _projectsService.Delete(id);
-            return result ? Ok() : NotFound();
+            var user = _usersService.GetUser(HttpContext.User.Identity.Name);
+            if (user != null)
+            {
+                if (user.Status == UserStatus.Admin || user.Status == UserStatus.Editor)
+                {
+                    bool result = _projectsService.Delete(id);
+                    return result ? Ok() : NotFound();
+                }
+                return Unauthorized();
+            }
+            return BadRequest();
+        }
+
+        [HttpPatch("{id}/users")]
+        public IActionResult AddUserToProject(int id, [FromBody] List<int> usersIds)
+        {
+            if (usersIds != null)
+            {
+                var user = _usersService.GetUser(HttpContext.User.Identity.Name);
+                if (user != null)
+                {
+                    if (user.Status == UserStatus.Admin || user.Status == UserStatus.Editor)
+                    {
+                        _projectsService.AddUserToProject(id, usersIds);
+                        return Ok();
+                    }
+                    return Unauthorized();
+                }
+            }
+            return BadRequest();
+        }
+
+        [HttpPatch("{id}/users/remove")]
+        public IActionResult RemoveUsersFromProject(int id, [FromBody] List<int> usersIds)
+        {
+            if (usersIds != null)
+            {
+                var user = _usersService.GetUser(HttpContext.User.Identity.Name);
+                if (user != null)
+                {
+                    if (user.Status == UserStatus.Admin || user.Status == UserStatus.Editor)
+                    {
+                        _projectsService.RemoveUsersFromProject(id, usersIds);
+                        return Ok();
+                    }
+                }
+            }
+            return BadRequest();
         }
     }
 }

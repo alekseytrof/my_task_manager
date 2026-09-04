@@ -125,5 +125,20 @@ namespace MyTaskManager.Api.Models.Services
                 _db.SaveChangesAsync();
             });
         }
+
+        public UserDto Get(int id)
+        {
+            var user = _db.Users.FirstOrDefault(u => u.Id == id);
+            return user?.ToUserDto();
+        }
+
+        public IEnumerable<UserDto> GetAllByIds(List<int> userIds)
+        {
+            foreach (int id in userIds)
+            {
+                var user = _db.Users.FirstOrDefault(u => u.Id == id).ToUserDto();
+                yield return user;
+            }
+        }
     }
 }
