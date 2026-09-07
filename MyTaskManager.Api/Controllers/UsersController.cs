@@ -32,7 +32,7 @@ namespace MyTaskManager.Api.Controllers
         {
             if (userModel != null)
             {
-                bool result = _usersService.Create(userModel);
+                var result = _usersService.Create(userModel);
                 return result ? Ok() : NotFound();
             }
             return BadRequest();

@@ -1,4 +1,6 @@
-﻿namespace MyTaskManager.Api.Models.Abstractions
+﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
+
+namespace MyTaskManager.Api.Models.Abstractions
 {
     public interface ICommonService<T>
     {

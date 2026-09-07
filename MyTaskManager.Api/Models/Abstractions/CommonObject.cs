@@ -7,19 +7,19 @@ namespace MyTaskManager.Api.Models
         public string Name { get; set; }
         public string Description { get; set; }
         public DateTime CreationDate { get; set; }
-        public byte[] Photo { get; set; }
+        public byte[]? Photo { get; set; }
 
         public CommonObject()
         {
             CreationDate = DateTime.Now;
         }
 
-        public CommonObject(ProjectDto projectDto)
+        public CommonObject(CommonDto projectDto)
         {
             Name = projectDto.Name;
             Description = projectDto.Description;
             Photo = projectDto.Photo;
-            CreationDate = projectDto.CreationDate;
+            CreationDate = projectDto.CreationDate == null ? DateTime.Now : projectDto.CreationDate;
         }
     }
 }

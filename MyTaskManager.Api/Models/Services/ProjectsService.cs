@@ -16,31 +16,28 @@ namespace MyTaskManager.Api.Models.Services
 
         public bool Create(ProjectDto model)
         {
-            var result = DoAction(delegate
+            return DoAction(delegate
             {
                 Project newProject = new Project(model);
                 _db.Project.Add(newProject);
                 _db.SaveChanges();
 
             });
-            return result;
         }
 
         public bool Delete(int id)
         {
-            var result = DoAction(delegate
+            return DoAction(delegate
             {
                 Project project = _db.Project.FirstOrDefault(p => p.Id == id);
                 _db.Project.Remove(project);
                 _db.SaveChanges();
-
             });
-            return result;
         }
 
         public bool Update(int id, ProjectDto model)
         {
-            var result = DoAction(delegate
+            return DoAction(delegate
             {
                 Project project = _db.Project.FirstOrDefault(p => p.Id == id);
 
@@ -53,13 +50,19 @@ namespace MyTaskManager.Api.Models.Services
                 _db.Project.Update(project);
                 _db.SaveChanges();
             });
-            return result;
         }
 
         public ProjectDto Get(int id)
         {
-            Project project = _db.Project.FirstOrDefault(p => p.Id == id);
-            return project?.ToProjectDto();
+            Project project = _db.Project.Include(u => u.AllUsers).Include(u => u.AllDesks).FirstOrDefault(p => p.Id == id);
+
+            var projectsModel = project?.ToProjectDto();
+            if (projectsModel != null)
+            {
+                projectsModel.AllUsersIds = project.AllUsers.Select(u => u.Id).ToList();
+                projectsModel.AllDesksIds = project.AllDesks.Select(d => d.Id).ToList();
+            }
+            return projectsModel;
         }
 
         public async Task<IEnumerable<ProjectDto>> GetByUserId(int userId)
@@ -76,18 +79,21 @@ namespace MyTaskManager.Api.Models.Services
             return result;
         }
 
-        public IQueryable<ProjectDto> GetAll()
+        public IQueryable<CommonDto> GetAll()
         {
-            return _db.Project.Select(p => p.ToProjectDto());
+            return _db.Project.Select(p => p.ToProjectDto() as CommonDto);
         }
 
-        public void AddUserToProject(int id, List<int> userIds)
+        public void AddUsersToProject(int id, List<int> userIds)
         {
             Project project = _db.Project.FirstOrDefault(p => p.Id == id);
             foreach (var userId in userIds)
             {
                 var user = _db.Users.FirstOrDefault(u => u.Id == userId);
-                project.AllUsers.Add(user);
+                if (project.AllUsers.Contains(user) == false)
+                {
+                    project.AllUsers.Add(user);
+                }
             }
             _db.SaveChanges();
         }

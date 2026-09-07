@@ -25,10 +25,24 @@ namespace MyTaskManager.Api.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
-        public async Task<IEnumerable<ProjectDto>> Get(ProjectDto projectDto)
+        public async Task<IEnumerable<CommonDto>> Get()
         {
-            return await _db.Project.Select(p => p.ToProjectDto()).ToArrayAsync();
+            var user = _usersService.GetUser(HttpContext.User.Identity.Name);
+            if (user.Status == UserStatus.Admin)
+            {
+                try
+                {
+                    return await _projectsService.GetAll().ToListAsync();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message + "\n" + ex.StackTrace);
+                }
+            }
+            else
+            {
+                return await _projectsService.GetByUserId(user.Id);
+            }
         }
 
         [HttpGet("{id}")]
@@ -36,20 +50,6 @@ namespace MyTaskManager.Api.Controllers
         {
             var project = _projectsService.Get(id);
             return project == null ? NoContent() : Ok(project);
-        }
-
-        [HttpGet]
-        public async Task<IEnumerable<ProjectDto>> Get()
-        {
-            var user = _usersService.GetUser(HttpContext.User.Identity.Name);
-            if (user.Status == UserStatus.Admin)
-            {
-                return await _projectsService.GetAll().ToListAsync();
-            }
-            else
-            {
-                return await _projectsService.GetByUserId(user.Id);
-            }
         }
 
         [HttpPost]
@@ -67,11 +67,12 @@ namespace MyTaskManager.Api.Controllers
                         {
                             admin = new ProjectAdmin(user);
                             _db.ProjectAdmins.Add(admin);
+                            _db.SaveChanges();
                         }
                         projectDto.AdminId = admin.Id;
 
-                        bool result = _projectsService.Create(projectDto);
-                        return result ? Ok() : NotFound();
+                        var result = _projectsService.Create(projectDto);
+                        return result != null ? Ok(projectDto) : NotFound();
                     }
                     return Unauthorized();
                 }
@@ -115,7 +116,7 @@ namespace MyTaskManager.Api.Controllers
         }
 
         [HttpPatch("{id}/users")]
-        public IActionResult AddUserToProject(int id, [FromBody] List<int> usersIds)
+        public IActionResult AddUsersToProject(int id, [FromBody] List<int> usersIds)
         {
             if (usersIds != null)
             {
@@ -124,7 +125,7 @@ namespace MyTaskManager.Api.Controllers
                 {
                     if (user.Status == UserStatus.Admin || user.Status == UserStatus.Editor)
                     {
-                        _projectsService.AddUserToProject(id, usersIds);
+                        _projectsService.AddUsersToProject(id, usersIds);
                         return Ok();
                     }
                     return Unauthorized();
@@ -146,6 +147,7 @@ namespace MyTaskManager.Api.Controllers
                         _projectsService.RemoveUsersFromProject(id, usersIds);
                         return Ok();
                     }
+                    return Unauthorized();
                 }
             }
             return BadRequest();
