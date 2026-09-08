@@ -1,4 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using MyTaskManager.Api.Models.Data;
+using MyTaskManager.Api.Models.Services;
+using MyTaskManager.Common.Models;
 
 namespace MyTaskManager.Api.Controllers
 {
@@ -6,31 +10,79 @@ namespace MyTaskManager.Api.Controllers
     [ApiController]
     public class TasksController : ControllerBase
     {
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly UsersService _usersService;
+        private readonly DesksService _desksService;
+        private readonly TasksService _tasksService;
+
+        public TasksController(ApplicationContext db)
         {
-            return new string[] { "value1", "value2" };
+            _usersService = new UsersService(db);
+            _desksService = new DesksService(db);
+            _tasksService = new TasksService(db);
+        }
+
+        [HttpGet]
+        public async Task<IEnumerable<CommonDto>> GetTasksByDesk(int deskId)
+        {
+            return await _tasksService.GetAll(deskId).ToListAsync();
+        }
+
+        [HttpGet("user")]
+        public async Task<IEnumerable<CommonDto>> GetTasksForCurrentUser()
+        {
+            var user = _usersService.GetUser(HttpContext.User.Identity.Name);
+            if (user != null)
+            {
+                return await _tasksService.GetTaskForUser(user.Id).ToListAsync();
+            }
+            return Array.Empty<CommonDto>();
         }
 
         [HttpGet("{id}")]
-        public string Get(int id)
+        public IActionResult Get(int id)
         {
-            return "value";
+            var task = _tasksService.Get(id);
+            return task == null ? NotFound() : Ok(task);
         }
 
         [HttpPost]
-        public void Create([FromBody] string value)
+        public IActionResult Create([FromBody] TaskDto taskDto)
         {
+            var user = _usersService.GetUser(HttpContext.User.Identity.Name);
+            if (user != null)
+            {
+                if (taskDto != null)
+                {
+                    taskDto.CreatorId = user.Id;
+                    bool result = _tasksService.Create(taskDto);
+                    return result ? Ok() : NotFound();
+                }
+                return BadRequest();
+            }
+            return Unauthorized();
         }
 
-        [HttpPut("{id}")]
-        public void Update(int id, [FromBody] string value)
+        [HttpPatch("{id}")]
+        public IActionResult Update(int id, [FromBody] TaskDto taskDto)
         {
+            var user = _usersService.GetUser(HttpContext.User.Identity.Name);
+            if (user != null)
+            {
+                if (taskDto != null)
+                {
+                    bool result = _tasksService.Update(id, taskDto);
+                    return result ? Ok() : NotFound();
+                }
+                return BadRequest();
+            }
+            return Unauthorized();
         }
 
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
+            bool result = _tasksService.Delete(id);
+            return result ? Ok() : NotFound();
         }
     }
 }

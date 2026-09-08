@@ -60,6 +60,7 @@ namespace MyTaskManager.Api.Controllers
             {
                 if (deskDto != null)
                 {
+                    deskDto.AdminId = user.Id;
                     bool result = _desksService.Create(deskDto);
                     return result ? Ok() : NotFound();
                 }
