@@ -3,9 +3,9 @@
     public class DeskDto : CommonDto
     {
         public bool IsPrivate { get; set; }
-        public string[] Colums { get; set; }
+        public string[] Columns { get; set; }
         public int AdminId { get; set; }
         public int ProjectId { get; set; }
-        public List<int> TasksIds { get; set; }
+        public List<int>? TasksIds { get; set; }
     }
 }

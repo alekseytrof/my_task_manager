@@ -7,12 +7,12 @@ namespace MyTaskManager.Api.Models
     {
         public int Id { get; set; }
         public bool IsPrivate { get; set; }
-        public string Colums { get; set; }
+        public string Columns { get; set; }
         public int AdminId { get; set; }
         public User Admin { get; set; }
         public int ProjectId { get; set; }
         public Project Project { get; set; }
-        public List<TaskModel> Tasks { get; set; } = new List<TaskModel>();
+        public List<TaskModel>? Tasks { get; set; } = new List<TaskModel>();
 
         public Desk() { }
 
@@ -23,9 +23,9 @@ namespace MyTaskManager.Api.Models
             IsPrivate = dto.IsPrivate;
             AdminId = dto.AdminId;
             ProjectId = dto.ProjectId;
-            if (dto.Colums.Any())
+            if (dto.Columns.Any())
             {
-                Colums = JsonConvert.SerializeObject(dto.Colums);
+                Columns = JsonConvert.SerializeObject(dto.Columns);
             }
         }
 
@@ -40,7 +40,7 @@ namespace MyTaskManager.Api.Models
                 AdminId = this.AdminId,
                 Photo = this.Photo,
                 IsPrivate = this.IsPrivate,
-                Colums = JsonConvert.DeserializeObject<string[]>(this.Colums),
+                Columns = JsonConvert.DeserializeObject<string[]>(this.Columns),
                 ProjectId = this.ProjectId
             };
         }

@@ -19,7 +19,7 @@ namespace MyTaskManager.Api.Models
             Name = projectDto.Name;
             Description = projectDto.Description;
             Photo = projectDto.Photo;
-            CreationDate = projectDto.CreationDate == null ? DateTime.Now : projectDto.CreationDate;
+            CreationDate = DateTime.Now;
         }
     }
 }

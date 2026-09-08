@@ -43,7 +43,7 @@ namespace MyTaskManager.Api.Controllers
             return desk == null ? NotFound() : Ok(desk);
         }
 
-        [HttpGet("project/{projectId}")]
+        [HttpGet("project")]
         public async Task<IEnumerable<CommonDto>> GetProjectDesks(int projectId)
         {
             var user = _usersService.GetUser(HttpContext.User.Identity.Name);
@@ -57,19 +57,40 @@ namespace MyTaskManager.Api.Controllers
         [HttpPost]
         public IActionResult Create([FromBody] DeskDto deskDto)
         {
-            return Ok();
+            var user = _usersService.GetUser(HttpContext.User.Identity.Name);
+            if (user != null)
+            {
+                if (deskDto != null)
+                {
+                    bool result = _desksService.Create(deskDto);
+                    return result ? Ok() : NotFound();
+                }
+                return BadRequest();
+            }
+            return Unauthorized();
         }
 
         [HttpPatch("{id}")]
         public IActionResult Update(int id, [FromBody] DeskDto deskDto)
         {
-            return Ok();
+            var user = _usersService.GetUser(HttpContext.User.Identity.Name);
+            if (user != null)
+            {
+                if (deskDto != null)
+                {
+                    bool result = _desksService.Update(id, deskDto);
+                    return result ? Ok() : NotFound();
+                }
+                return BadRequest();
+            }
+            return Unauthorized();
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            return Ok();
+            bool result = _desksService.Delete(id);
+            return result ? Ok() : NotFound();
         }
     }
 }
