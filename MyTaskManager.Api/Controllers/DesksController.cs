@@ -13,13 +13,11 @@ namespace MyTaskManager.Api.Controllers
     [Authorize]
     public class DesksController : ControllerBase
     {
-        private readonly ApplicationContext _db;
         private readonly UsersService _usersService;
         private readonly DesksService _desksService;
 
         public DesksController(ApplicationContext db)
         {
-            _db = db;
             _usersService = new UsersService(db);
             _desksService = new DesksService(db);
         }
