@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MyTaskManager.Api.Models.Data;
 using MyTaskManager.Api.Models.Services;
@@ -8,16 +9,15 @@ namespace MyTaskManager.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class TasksController : ControllerBase
     {
         private readonly UsersService _usersService;
-        private readonly DesksService _desksService;
         private readonly TasksService _tasksService;
 
         public TasksController(ApplicationContext db)
         {
             _usersService = new UsersService(db);
-            _desksService = new DesksService(db);
             _tasksService = new TasksService(db);
         }
 

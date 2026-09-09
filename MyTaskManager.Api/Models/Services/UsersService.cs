@@ -56,12 +56,19 @@ namespace MyTaskManager.Api.Models.Services
 
                 var claims = new List<Claim>
                 {
+                    new Claim(ClaimTypes.Name, currentUser.Email),
+                    new Claim(ClaimTypes.Email, currentUser.Email),
+                    new Claim(ClaimTypes.Role, currentUser.Status.ToString()),
                     new Claim(ClaimsIdentity.DefaultNameClaimType, currentUser.Email),
                     new Claim(ClaimsIdentity.DefaultRoleClaimType, currentUser.Status.ToString())
                 };
-                ClaimsIdentity claimsIdentity =
-                new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
+
+                ClaimsIdentity claimsIdentity = new ClaimsIdentity(
+                    claims,
+                    "Token",
+                    ClaimsIdentity.DefaultNameClaimType,
                     ClaimsIdentity.DefaultRoleClaimType);
+
                 return claimsIdentity;
             }
 
