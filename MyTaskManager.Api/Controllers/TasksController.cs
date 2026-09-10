@@ -9,7 +9,6 @@ namespace MyTaskManager.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class TasksController : ControllerBase
     {
         private readonly UsersService _usersService;
@@ -22,20 +21,22 @@ namespace MyTaskManager.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<CommonDto>> GetTasksByDesk(int deskId)
+        public async Task<ActionResult<IEnumerable<TaskDto>>> GetTasksByDesk(int deskId)
         {
-            return await _tasksService.GetAll(deskId).ToListAsync();
+            var result = await _tasksService.GetAll(deskId).ToListAsync();
+            return result == null ? NoContent() : Ok(result);
         }
 
         [HttpGet("user")]
-        public async Task<IEnumerable<CommonDto>> GetTasksForCurrentUser()
+        public async Task<ActionResult<IEnumerable<TaskDto>>> GetTasksForCurrentUser()
         {
             var user = _usersService.GetUser(HttpContext.User.Identity.Name);
             if (user != null)
             {
-                return await _tasksService.GetTaskForUser(user.Id).ToListAsync();
+                var result = await _tasksService.GetTaskForUser(user.Id).ToListAsync();
+                return result == null ? NoContent() : Ok(result);
             }
-            return Array.Empty<CommonDto>();
+            return Unauthorized(Array.Empty<TaskDto>());
         }
 
         [HttpGet("{id}")]

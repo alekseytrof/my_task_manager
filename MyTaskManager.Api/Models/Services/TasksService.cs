@@ -42,9 +42,9 @@ namespace MyTaskManager.Api.Models.Services
             return task?.ToDto();
         }
 
-        public IQueryable<CommonDto> GetTaskForUser(int userId)
+        public IQueryable<TaskDto> GetTaskForUser(int userId)
         {
-            return _db.Tasks.Where(t => t.CreatorId == userId || t.ExecutorId == userId).Select(t => t.ToDto() as CommonDto);
+            return _db.Tasks.Where(t => t.CreatorId == userId || t.ExecutorId == userId).Select(t => t.ToDto());
         }
 
         public bool Update(int id, TaskDto model)
@@ -68,9 +68,9 @@ namespace MyTaskManager.Api.Models.Services
             });
         }
 
-        public IQueryable<CommonDto> GetAll(int deskId)
+        public IQueryable<TaskDto> GetAll(int deskId)
         {
-            return _db.Tasks.Where(t => t.DeskId == deskId).Select(t => t.ToDto() as CommonDto);
+            return _db.Tasks.Where(t => t.DeskId == deskId).Select(t => t.ToShortDto());
         }
     }
 }
