@@ -89,24 +89,20 @@ namespace MyTaskManager.Api.Models.Services
 
         public bool Update(int id, UserDto model)
         {
-            User userForUpdate = _db.Users.FirstOrDefault(u => u.Id == id);
-            if (userForUpdate != null)
+            return DoAction(delegate
             {
-                return DoAction(delegate
-                {
-                    userForUpdate.Email = model.Email;
-                    userForUpdate.Password = model.Password;
-                    userForUpdate.Status = model.Status;
-                    userForUpdate.Phone = model.Phone;
-                    userForUpdate.FirstName = model.FirstName;
-                    userForUpdate.LastName = model.LastName;
-                    userForUpdate.Photo = model.Photo;
+                User userForUpdate = _db.Users.FirstOrDefault(u => u.Id == id);
+                userForUpdate.Email = model.Email;
+                userForUpdate.Password = model.Password;
+                userForUpdate.Status = model.Status;
+                userForUpdate.Phone = model.Phone;
+                userForUpdate.FirstName = model.FirstName;
+                userForUpdate.LastName = model.LastName;
+                userForUpdate.Photo = model.Photo;
 
-                    _db.Users.Update(userForUpdate);
-                    _db.SaveChanges();
-                });
-            }
-            return false;
+                _db.Users.Update(userForUpdate);
+                _db.SaveChanges();
+            });
         }
 
         public bool Delete(int id)
