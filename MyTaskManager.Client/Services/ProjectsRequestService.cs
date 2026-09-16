@@ -27,21 +27,18 @@ namespace MyTaskManager.Client.Services
         public HttpStatusCode CreateProject(AuthToken token, ProjectDto project)
         {
             string projectJson = JsonConvert.SerializeObject(project);
-            var result = SendDataByUrl(HttpMethod.Post, _projectsConrollerUrl, token, projectJson);
-            return result;
+            return SendDataByUrl(HttpMethod.Post, _projectsConrollerUrl, token, projectJson);
         }
 
         public HttpStatusCode UpdateProject(AuthToken token, ProjectDto project)
         {
             string projectJson = JsonConvert.SerializeObject(project);
-            var result = SendDataByUrl(HttpMethod.Patch, _projectsConrollerUrl + $"/{project.Id}", token, projectJson);
-            return result;
+            return SendDataByUrl(HttpMethod.Patch, _projectsConrollerUrl + $"/{project.Id}", token, projectJson);
         }
 
         public HttpStatusCode DeleteProject(AuthToken token, int projectId)
         {
-            var result = DeleteDataByUrl(_projectsConrollerUrl + $"/{projectId}", token);
-            return result;
+            return DeleteDataByUrl(_projectsConrollerUrl + $"/{projectId}", token);
         }
 
         public HttpStatusCode AddUsersToProject(AuthToken token, int projectId, List<int> usersIds)
