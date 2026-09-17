@@ -20,6 +20,13 @@ namespace MyTaskManager.Client.Services
             return token;
         }
 
+        public UserDto GetCurrentUser(AuthToken token)
+        {
+            string response = GetDataByUrl(HttpMethod.Get, HOST + "account/info", token);
+            UserDto user = JsonConvert.DeserializeObject<UserDto>(response);
+            return user;
+        }
+
         public HttpStatusCode CreateUser(AuthToken token, UserDto user)
         {
             string userJson = JsonConvert.SerializeObject(user);
