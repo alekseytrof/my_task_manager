@@ -6,11 +6,11 @@
         xmlns:local="clr-namespace:MyTaskManager.Client.Views"
         xmlns:prism="http://prismlibrary.com/"
         prism:ViewModelLocator.AutoWireViewModel="True"
+        WindowStartupLocation="CenterScreen"
         mc:Ignorable="d"
         Title="MainWindow" 
         Height="450" Width="800"
-        MinHeight="200" MinWidth="300"
-        WindowStartupLocation="CenterScreen">
+        MinHeight="200" MinWidth="300">
     <Grid>
 
     </Grid>
