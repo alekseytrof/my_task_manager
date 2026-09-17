@@ -1,6 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MyTaskManager.Client.Models;
-using MyTaskManager.Client.Services;
+﻿using MyTaskManager.Client.Models;
 using MyTaskManager.Common.Models;
 using Newtonsoft.Json;
 using System.Net;
