@@ -2,6 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Brush x:Key="commomBlueColor">#0696d7</Brush>
     <Brush x:Key="commomRedColor">Red</Brush>
+    <Brush x:Key="commomGrayColor">#FF8D8D8D</Brush>
     <FontStyle x:Key="commonFontStyle">Normal</FontStyle>
 
     <Style TargetType="TextBox" x:Key="commonTBox">
@@ -57,4 +58,9 @@
         <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>
 
+    <Style TargetType="GridSplitter" x:Key="commonSplitter">
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="{StaticResource commomGrayColor}"/>
+        <Setter Property="Margin" Value="2"/>
+    </Style>
 </ResourceDictionary>
