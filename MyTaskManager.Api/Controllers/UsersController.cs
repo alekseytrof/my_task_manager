@@ -49,6 +49,13 @@ namespace MyTaskManager.Api.Controllers
             return BadRequest();
         }
 
+        [HttpGet("{id}")]
+        public ActionResult<UserDto> GetUser(int id)
+        {
+            var user = _usersService.Get(id);
+            return user != null ? Ok(user) : NotFound();
+        }
+
         [HttpDelete("{id}")]
         public IActionResult DeleteUser(int id)
         {

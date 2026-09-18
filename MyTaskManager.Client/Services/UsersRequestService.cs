@@ -27,6 +27,13 @@ namespace MyTaskManager.Client.Services
             return user;
         }
 
+        public UserDto GetUserById(AuthToken token, int? userId)
+        {
+            string response = GetDataByUrl(HttpMethod.Get, _usersConrollerUrl + $"/{userId}", token);
+            UserDto user = JsonConvert.DeserializeObject<UserDto>(response);
+            return user;
+        }
+
         public HttpStatusCode CreateUser(AuthToken token, UserDto user)
         {
             string userJson = JsonConvert.SerializeObject(user);

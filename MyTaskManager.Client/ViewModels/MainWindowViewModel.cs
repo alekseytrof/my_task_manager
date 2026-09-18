@@ -1,11 +1,11 @@
-﻿using Prism.Mvvm;
-using Prism.Commands;
-using System.Windows;
-using MyTaskManager.Client.Models;
-using MyTaskManager.Common.Models;
-using MyTaskManager.Client.Views.Pages;
-using System.Windows.Controls;
+﻿using MyTaskManager.Client.Models;
 using MyTaskManager.Client.Views;
+using MyTaskManager.Client.Views.Pages;
+using MyTaskManager.Common.Models;
+using Prism.Commands;
+using Prism.Mvvm;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace MyTaskManager.Client.ViewModels
 {
@@ -123,8 +123,7 @@ namespace MyTaskManager.Client.ViewModels
         private void OpenMyInfoPage()
         {
             var page = new UserInfoPage();
-            page.DataContext = this;
-            OpenPage(page, _userInfoBtnName);
+            OpenPage(page, _userInfoBtnName, this);
         }
 
         private void OpenProjectsPage()
@@ -141,8 +140,8 @@ namespace MyTaskManager.Client.ViewModels
 
         private void OpenTasksPage()
         {
-            SelectedPageName = _userTasksBtnName;
-            ShowMessage(_userTasksBtnName);
+            var page = new UserTasksPage();
+            OpenPage(page, _userTasksBtnName, new UserTasksPageViewModel(Token));
         }
 
         private void Logout()
@@ -169,10 +168,11 @@ namespace MyTaskManager.Client.ViewModels
             MessageBox.Show(message);
         }
 
-        private void OpenPage(Page page, string namePage)
+        private void OpenPage(Page page, string namePage, BindableBase viewModel)
         {
             SelectedPage = page;
             SelectedPageName = namePage;
+            SelectedPage.DataContext = viewModel;
         }
     }
 }
