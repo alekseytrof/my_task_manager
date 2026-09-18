@@ -9,9 +9,10 @@
         WindowStartupLocation="CenterScreen"
         mc:Ignorable="d"
         Title="Login"
-        Height="300" Width="300"
+        Height="300" Width="400"
         ResizeMode="NoResize"
-        Name ="window">
+        Name ="window"
+        Style="{StaticResource MaterialDesignWindow}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -21,12 +22,15 @@
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Center"
                     Width="250">
-            <TextBox Text="{Binding UserLogin}" Style="{StaticResource commonTBox}"/>
-            <PasswordBox x:Name="UserPassword" Style="{StaticResource commonPBox}"/>
+            <TextBox Text="{Binding UserLogin}" Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                     Margin="0,3"/>
+            <PasswordBox x:Name="UserPassword" Style="{DynamicResource MaterialDesignOutlinedPasswordBox}"
+                     Margin="0,3"/>
             <Button Content="OK" Command="{Binding GetUserFromDBCommand}"
                     CommandParameter="{Binding ElementName=UserPassword}"
-                    Style="{StaticResource commonBtn}"
-                    Width="100"/>
+                    Style="{DynamicResource MaterialDesignRaisedButton}"
+                    Width="100"
+                    Margin="0,5"/>
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Vertical" VerticalAlignment="Center"
                     HorizontalAlignment="Stretch">
@@ -40,11 +44,13 @@
                     </Style.Triggers>
                 </Style>
             </StackPanel.Style>
-            <TextBlock Text="Предыдущий пользователь" Style="{StaticResource commonTBlock}"/>
+            <TextBlock Text="Предыдущий пользователь" Style="{StaticResource MaterialDesignButtonTextBlock}"
+                       Margin="5,0,0,0"/>
             <Button Content="{Binding CurrentUserCache.Login}"
                     Command="{Binding LoginFromCacheCommand}"
                     CommandParameter="{Binding ElementName=window}"
-                    Style="{StaticResource commonBtn}"/>
+                    Style="{DynamicResource MaterialDesignRaisedButton}"
+                    Margin="5,0,5,5"/>
         </StackPanel>
     </Grid>
 </Window>
