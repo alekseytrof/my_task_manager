@@ -149,6 +149,7 @@ namespace MyTaskManager.Client.ViewModels
         private void OpenMainWindow()
         {
             MainWindow mainWindow = new MainWindow();
+            mainWindow.DataContext = new MainWindowViewModel(AuthToken, CurrentUser);
             mainWindow.Show();
 
             _currentWindow.Close();

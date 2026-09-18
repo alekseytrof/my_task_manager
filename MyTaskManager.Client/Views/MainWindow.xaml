@@ -4,8 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyTaskManager.Client.Views"
-        xmlns:prism="http://prismlibrary.com/"
-        prism:ViewModelLocator.AutoWireViewModel="True"
         WindowStartupLocation="CenterScreen"
         mc:Ignorable="d"
         Title="MainWindow" 
@@ -28,6 +26,16 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
+        </Grid>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="30"/>
+            </Grid.RowDefinitions>
+            <Border Grid.Row="0" BorderThickness="0,0,0,2" Style="{StaticResource commonBorder}"/>
+            <TextBlock Text="{Binding SelectedPageName}" Style="{StaticResource headerTBlock}"/>
+            <Frame Grid.Row="1" NavigationUIVisibility="Hidden" Content="{Binding SelectedPage}"/>
         </Grid>
 
     </Grid>
