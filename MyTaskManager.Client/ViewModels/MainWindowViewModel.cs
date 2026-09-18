@@ -5,6 +5,7 @@ using MyTaskManager.Client.Models;
 using MyTaskManager.Common.Models;
 using MyTaskManager.Client.Views.Pages;
 using System.Windows.Controls;
+using MyTaskManager.Client.Views;
 
 namespace MyTaskManager.Client.ViewModels
 {
@@ -20,8 +21,9 @@ namespace MyTaskManager.Client.ViewModels
         public DelegateCommand OpenUsersManagementCommand;
         #endregion
 
-        public MainWindowViewModel(AuthToken token, UserDto user)
+        public MainWindowViewModel(AuthToken token, UserDto user, Window currentWindow = null)
         {
+            _currentWindow = currentWindow;
             Token = token;
             CurrentUser = user;
 
@@ -45,9 +47,13 @@ namespace MyTaskManager.Client.ViewModels
 
             LogoutCommand = new DelegateCommand(Logout);
             NavButtons.Add(_logoutBtnName, LogoutCommand);
+            _currentWindow = currentWindow;
+
+            OpenMyInfoPage();
         }
 
         #region PROPERTIES
+        private Window _currentWindow;
         private readonly string _userProjectsBtnName = "My projects";
         private readonly string _userDesksBtnName = "My desks";
         private readonly string _userTasksBtnName = "My tasks";
@@ -141,7 +147,14 @@ namespace MyTaskManager.Client.ViewModels
 
         private void Logout()
         {
-            ShowMessage(_logoutBtnName);
+            var question = MessageBox.Show("Are you sure?", "logout", MessageBoxButton.YesNo);
+
+            if (question == MessageBoxResult.Yes && _currentWindow != null)
+            {
+                Login login = new Login();
+                login.Show();
+                _currentWindow.Close();
+            }
         }
 
         private void OpenUsersManagement()
