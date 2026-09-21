@@ -1,0 +1,91 @@
+﻿using MyTaskManager.Client.Models;
+using MyTaskManager.Client.Services;
+using MyTaskManager.Common.Models;
+using Prism.Commands;
+using Prism.Mvvm;
+
+namespace MyTaskManager.Client.ViewModels
+{
+    public class ProjectsPageViewModel : BindableBase
+    {
+        private AuthToken _token;
+        private UsersRequestService _usersRequestService;
+        private ProjectsRequestService _projectsRequestService;
+        private CommonViewService _commonViewService;
+
+        #region COMMANDS
+        public DelegateCommand OpenNewProjectCommand;
+        public DelegateCommand<object> OpenUpdateProjectCommand;
+        public DelegateCommand<object> ShowProjectInfoCommand;
+
+        #endregion
+
+        public ProjectsPageViewModel(AuthToken token)
+        {
+            _commonViewService = new CommonViewService();
+            _usersRequestService = new UsersRequestService();
+            _projectsRequestService = new ProjectsRequestService();
+
+            _token = token;
+
+            OpenNewProjectCommand = new DelegateCommand(OpenNewProject);
+            OpenUpdateProjectCommand = new DelegateCommand<object>(UpdateNewProject);
+            ShowProjectInfoCommand = new DelegateCommand<object>(ShowProjectInfo);
+        }
+
+        #region PROPERTIES
+        public List<ModelClient<CommonDto>> UserProjects
+        {
+            get => _projectsRequestService.GetAllProjects(_token).Select(project => new ModelClient<CommonDto>(project)).ToList();
+        }
+
+        private ModelClient<ProjectDto> _selectedProject;
+        public ModelClient<ProjectDto> SelectedProject
+        {
+            get => _selectedProject;
+            set
+            {
+                _selectedProject = value;
+                RaisePropertyChanged(nameof(SelectedProject));
+
+                if (SelectedProject.Model.AllUsersIds != null && SelectedProject.Model.AllUsersIds.Count > 0)
+                    UsersProject = SelectedProject.Model.AllUsersIds?.Select(userId => _usersRequestService.GetUserById(_token, userId)).ToList();
+            }
+        }
+
+        private List<UserDto> _usersProject;
+
+        public List<UserDto> UsersProject
+        {
+            get => _usersProject;
+            set
+            {
+                _usersProject = value;
+                RaisePropertyChanged(nameof(UsersProject));
+            }
+        }
+        #endregion
+
+        #region METHODS
+        private void OpenNewProject()
+        {
+            _commonViewService.ShowMessage("11");
+        }
+
+        private void UpdateNewProject(object param)
+        {
+            var selectedProject = param as ModelClient<ProjectDto>;
+            SelectedProject = selectedProject;
+
+            _commonViewService.ShowMessage("21");
+        }
+
+        private void ShowProjectInfo(object param)
+        {
+            var selectedProject = param as ModelClient<ProjectDto>;
+            SelectedProject = selectedProject;
+            _commonViewService.ShowMessage("31");
+        }
+        #endregion
+    }
+}

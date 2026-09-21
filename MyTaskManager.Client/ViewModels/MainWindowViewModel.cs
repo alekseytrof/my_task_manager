@@ -1,4 +1,5 @@
 ﻿using MyTaskManager.Client.Models;
+using MyTaskManager.Client.Services;
 using MyTaskManager.Client.Views;
 using MyTaskManager.Client.Views.Pages;
 using MyTaskManager.Common.Models;
@@ -11,6 +12,8 @@ namespace MyTaskManager.Client.ViewModels
 {
     class MainWindowViewModel : BindableBase
     {
+        private CommonViewService _commonViewService;
+
         #region COMMANDS
         public DelegateCommand OpenMyInfoPageCommand;
         public DelegateCommand OpenProjectsPageCommand;
@@ -23,6 +26,8 @@ namespace MyTaskManager.Client.ViewModels
 
         public MainWindowViewModel(AuthToken token, UserDto user, Window currentWindow = null)
         {
+            _commonViewService = new CommonViewService();
+
             _currentWindow = currentWindow;
             Token = token;
             CurrentUser = user;
@@ -128,14 +133,13 @@ namespace MyTaskManager.Client.ViewModels
 
         private void OpenProjectsPage()
         {
-            SelectedPageName = _userProjectsBtnName;
-            ShowMessage(_userProjectsBtnName);
+            var page = new ProjectsPage();
+            OpenPage(page, _userProjectsBtnName, new ProjectsPageViewModel(Token));
         }
 
         private void OpenDesksPage()
         {
-            SelectedPageName = _userDesksBtnName;
-            ShowMessage(_userDesksBtnName);
+            _commonViewService.ShowMessage(_userDesksBtnName);
         }
 
         private void OpenTasksPage()
@@ -159,14 +163,9 @@ namespace MyTaskManager.Client.ViewModels
         private void OpenUsersManagement()
         {
             SelectedPageName = _manageUsersBtnName;
-            ShowMessage(_manageUsersBtnName);
+            _commonViewService.ShowMessage(_manageUsersBtnName);
         }
         #endregion
-
-        private void ShowMessage(string message)
-        {
-            MessageBox.Show(message);
-        }
 
         private void OpenPage(Page page, string namePage, BindableBase viewModel)
         {

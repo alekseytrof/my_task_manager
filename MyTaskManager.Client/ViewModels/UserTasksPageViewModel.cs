@@ -1,6 +1,5 @@
 ﻿using MyTaskManager.Client.Models;
 using MyTaskManager.Client.Services;
-using MyTaskManager.Common.Models;
 using Prism.Mvvm;
 
 namespace MyTaskManager.Client.ViewModels
