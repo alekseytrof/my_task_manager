@@ -11,7 +11,7 @@ namespace MyTaskManager.Client.Models
 {
     public class ModelClient<T> where T : CommonDto
     {
-        public T Model { get; private set; }
+        public T Model { get; set; }
 
         public ModelClient(T model)
         {

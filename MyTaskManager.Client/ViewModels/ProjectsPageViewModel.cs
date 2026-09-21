@@ -14,9 +14,9 @@ namespace MyTaskManager.Client.ViewModels
         private CommonViewService _commonViewService;
 
         #region COMMANDS
-        public DelegateCommand OpenNewProjectCommand;
-        public DelegateCommand<object> OpenUpdateProjectCommand;
-        public DelegateCommand<object> ShowProjectInfoCommand;
+        public DelegateCommand OpenNewProjectCommand { get; private set; }
+        public DelegateCommand<object> OpenUpdateProjectCommand { get; private set; }
+        public DelegateCommand<object> ShowProjectInfoCommand { get; private set; }
 
         #endregion
 
@@ -34,9 +34,9 @@ namespace MyTaskManager.Client.ViewModels
         }
 
         #region PROPERTIES
-        public List<ModelClient<CommonDto>> UserProjects
+        public List<ModelClient<ProjectDto>> UserProjects
         {
-            get => _projectsRequestService.GetAllProjects(_token).Select(project => new ModelClient<CommonDto>(project)).ToList();
+            get => _projectsRequestService.GetAllProjects(_token).Select(project => new ModelClient<ProjectDto>(project)).ToList();
         }
 
         private ModelClient<ProjectDto> _selectedProject;
@@ -49,12 +49,17 @@ namespace MyTaskManager.Client.ViewModels
                 RaisePropertyChanged(nameof(SelectedProject));
 
                 if (SelectedProject.Model.AllUsersIds != null && SelectedProject.Model.AllUsersIds.Count > 0)
+                {
                     UsersProject = SelectedProject.Model.AllUsersIds?.Select(userId => _usersRequestService.GetUserById(_token, userId)).ToList();
+                }
+                else
+                {
+                    UsersProject = new List<UserDto>();
+                }
             }
         }
 
         private List<UserDto> _usersProject;
-
         public List<UserDto> UsersProject
         {
             get => _usersProject;
@@ -72,19 +77,30 @@ namespace MyTaskManager.Client.ViewModels
             _commonViewService.ShowMessage("11");
         }
 
-        private void UpdateNewProject(object param)
+        private void UpdateNewProject(object projectId)
         {
-            var selectedProject = param as ModelClient<ProjectDto>;
-            SelectedProject = selectedProject;
-
+            SelectedProject = GetProjectClientById(projectId);
             _commonViewService.ShowMessage("21");
         }
 
-        private void ShowProjectInfo(object param)
+        private void ShowProjectInfo(object projectId)
         {
-            var selectedProject = param as ModelClient<ProjectDto>;
-            SelectedProject = selectedProject;
+            SelectedProject = GetProjectClientById(projectId);
             _commonViewService.ShowMessage("31");
+        }
+
+        private ModelClient<ProjectDto> GetProjectClientById(object projectId)
+        {
+            try
+            {
+                int id = (int)projectId;
+                ProjectDto project = _projectsRequestService.GetProjectById(_token, id);
+                return new ModelClient<ProjectDto>(project);
+            }
+            catch (Exception ex)
+            {
+                return new ModelClient<ProjectDto>(null);
+            }
         }
         #endregion
     }

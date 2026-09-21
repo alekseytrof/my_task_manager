@@ -29,21 +29,17 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Border Style="{StaticResource commonBorder}">
+                            <Border Style="{StaticResource projectPaneBorder}">
                                 <StackPanel Margin="10">
                                     <TextBlock Text="{Binding Path=Model.Name}"
                                                Style="{StaticResource commonTBlock}"/>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="Numbers: " Style="{StaticResource commonTBlock}"/>
-                                        <TextBlock Text="{Binding Path=Model.AllUsersIds.Count}" Style="{StaticResource commonTBlock}"/>
-                                    </StackPanel>
                                     <Image Source="{Binding Path=Image}" Width="100" Height="100"/>
                                     <Button Content="Open" Command="{Binding Path=DataContext.ShowProjectInfoCommand,
                                         RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                            CommandParameter="{Binding}"/>
+                                            CommandParameter="{Binding Path=Model.Id}"/>
                                     <Button Content="Edit" Command="{Binding Path=DataContext.OpenUpdateProjectCommand,
                                         RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                            CommandParameter="{Binding}"/>
+                                            CommandParameter="{Binding Path=Model.Id}"/>
                                 </StackPanel>
                             </Border>
                         </DataTemplate>
@@ -53,6 +49,15 @@
         </Grid>
 
         <Grid Grid.Column="1">
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding SelectedProject.Model}" Value="{x:Null}">
+                            <Setter Property="Width" Value="0"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -60,9 +65,9 @@
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" Text="{Binding SelectProject.Model.Name}"
+            <TextBlock Grid.Row="0" Text="{Binding SelectedProject.Model.Name}"
                        Style="{StaticResource headerTBlock}"/>
-            <TextBlock Grid.Row="1" Text="{Binding SelectProject.Model.Description}"
+            <TextBlock Grid.Row="1" Text="{Binding SelectedProject.Model.Description}"
                         Style="{StaticResource commonTBlock}"/>
             <Button Grid.Row="2" Content="Add users" Command="{Binding}"/>
             <Button Grid.Row="3" Content="Desks" Command="{Binding}"/>
