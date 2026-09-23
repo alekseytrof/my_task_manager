@@ -10,9 +10,9 @@ using System.Windows.Controls;
 
 namespace MyTaskManager.Client.ViewModels
 {
-    class MainWindowViewModel : BindableBase
+    public class MainWindowViewModel : BindableBase
     {
-        private CommonViewService _commonViewService;
+        private CommonViewService _viewService;
 
         #region COMMANDS
         public DelegateCommand OpenMyInfoPageCommand { get; private set; }
@@ -26,7 +26,7 @@ namespace MyTaskManager.Client.ViewModels
 
         public MainWindowViewModel(AuthToken token, UserDto user, Window currentWindow = null)
         {
-            _commonViewService = new CommonViewService();
+            _viewService = new CommonViewService();
 
             _currentWindow = currentWindow;
             Token = token;
@@ -134,12 +134,12 @@ namespace MyTaskManager.Client.ViewModels
         private void OpenProjectsPage()
         {
             var page = new ProjectsPage();
-            OpenPage(page, _userProjectsBtnName, new ProjectsPageViewModel(Token));
+            OpenPage(page, _userProjectsBtnName, new ProjectsPageViewModel(Token, this));
         }
 
         private void OpenDesksPage()
         {
-            _commonViewService.ShowMessage(_userDesksBtnName);
+            _viewService.ShowMessage(_userDesksBtnName);
         }
 
         private void OpenTasksPage()
@@ -163,11 +163,11 @@ namespace MyTaskManager.Client.ViewModels
         private void OpenUsersManagement()
         {
             SelectedPageName = _manageUsersBtnName;
-            _commonViewService.ShowMessage(_manageUsersBtnName);
+            _viewService.ShowMessage(_manageUsersBtnName);
         }
         #endregion
 
-        private void OpenPage(Page page, string namePage, BindableBase viewModel)
+        public void OpenPage(Page page, string namePage, BindableBase viewModel)
         {
             SelectedPage = page;
             SelectedPageName = namePage;

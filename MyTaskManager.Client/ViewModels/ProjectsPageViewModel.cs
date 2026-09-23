@@ -1,6 +1,7 @@
 ﻿using MyTaskManager.Client.Models;
 using MyTaskManager.Client.Services;
 using MyTaskManager.Client.Views.AddWindows;
+using MyTaskManager.Client.Views.Pages;
 using MyTaskManager.Common.Models;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -13,6 +14,7 @@ namespace MyTaskManager.Client.ViewModels
         private UsersRequestService _usersRequestService;
         private ProjectsRequestService _projectsRequestService;
         private CommonViewService _viewService;
+        private MainWindowViewModel _mainWindowViewModel;
 
         #region COMMANDS
         public DelegateCommand OpenNewProjectCommand { get; private set; }
@@ -24,14 +26,16 @@ namespace MyTaskManager.Client.ViewModels
         public DelegateCommand AddUsersToProjectCommand { get; private set; }
         public DelegateCommand OpenUsersToProjectCommand { get; private set; }
         public DelegateCommand<object> DeleteUserFromProjectCommand { get; private set; }
+        public DelegateCommand OpenProjectDesksPageCommand { get; private set; }
 
         #endregion
 
-        public ProjectsPageViewModel(AuthToken token)
+        public ProjectsPageViewModel(AuthToken token, MainWindowViewModel mainWindowViewModel)
         {
             _viewService = new CommonViewService();
             _usersRequestService = new UsersRequestService();
             _projectsRequestService = new ProjectsRequestService();
+            _mainWindowViewModel = mainWindowViewModel;
 
             _token = token;
 
@@ -45,7 +49,9 @@ namespace MyTaskManager.Client.ViewModels
             SelectPhotoForProjectCommand = new DelegateCommand(SelectPhotoForProject);
             AddUsersToProjectCommand = new DelegateCommand(AddUsersToProject);
             OpenUsersToProjectCommand = new DelegateCommand(OpenUsersToProject);
+            OpenProjectDesksPageCommand = new DelegateCommand(OpenProjectDesksPage);
             DeleteUserFromProjectCommand = new DelegateCommand<object>(DeleteUserFromProject);
+            _mainWindowViewModel = mainWindowViewModel;
         }
 
         #region PROPERTIES
@@ -258,6 +264,15 @@ namespace MyTaskManager.Client.ViewModels
                 UsersProject.Remove(user);
 
                 UpdatePage();
+            }
+        }
+
+        private void OpenProjectDesksPage()
+        {
+            if (SelectedProject?.Model != null)
+            {
+                var page = new ProjectDesksPage();
+                _mainWindowViewModel.OpenPage(page, $"Desks of {SelectedProject.Model.Name}", new ProjectDesksPageViewModel(_token, SelectedProject.Model));
             }
         }
         #endregion
