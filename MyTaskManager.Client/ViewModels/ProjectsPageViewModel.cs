@@ -12,7 +12,7 @@ namespace MyTaskManager.Client.ViewModels
         private AuthToken _token;
         private UsersRequestService _usersRequestService;
         private ProjectsRequestService _projectsRequestService;
-        private CommonViewService _commonViewService;
+        private CommonViewService _viewService;
 
         #region COMMANDS
         public DelegateCommand OpenNewProjectCommand { get; private set; }
@@ -21,18 +21,21 @@ namespace MyTaskManager.Client.ViewModels
         public DelegateCommand CreateOrUpdateProjectCommand { get; private set; }
         public DelegateCommand DeleteProjectCommand { get; private set; }
         public DelegateCommand SelectPhotoForProjectCommand { get; private set; }
+        public DelegateCommand AddUsersToProjectCommand { get; private set; }
+        public DelegateCommand OpenUsersToProjectCommand { get; private set; }
+        public DelegateCommand<object> DeleteUserFromProjectCommand { get; private set; }
 
         #endregion
 
         public ProjectsPageViewModel(AuthToken token)
         {
-            _commonViewService = new CommonViewService();
+            _viewService = new CommonViewService();
             _usersRequestService = new UsersRequestService();
             _projectsRequestService = new ProjectsRequestService();
 
             _token = token;
 
-            UserProjects = GetProjectsToClient();
+            UpdatePage();
 
             OpenNewProjectCommand = new DelegateCommand(OpenNewProject);
             OpenUpdateProjectCommand = new DelegateCommand<object>(UpdateNewProject);
@@ -40,9 +43,17 @@ namespace MyTaskManager.Client.ViewModels
             CreateOrUpdateProjectCommand = new DelegateCommand(CreateOrUpdateProject);
             DeleteProjectCommand = new DelegateCommand(DeleteProject);
             SelectPhotoForProjectCommand = new DelegateCommand(SelectPhotoForProject);
+            AddUsersToProjectCommand = new DelegateCommand(AddUsersToProject);
+            OpenUsersToProjectCommand = new DelegateCommand(OpenUsersToProject);
+            DeleteUserFromProjectCommand = new DelegateCommand<object>(DeleteUserFromProject);
         }
 
         #region PROPERTIES
+        public UserDto CurrentUser
+        {
+            get => _usersRequestService.GetCurrentUser(_token);
+        }
+
         private ClientAction _clientAction;
         public ClientAction ClientAction
         {
@@ -74,7 +85,7 @@ namespace MyTaskManager.Client.ViewModels
                 _selectedProject = value;
                 RaisePropertyChanged(nameof(SelectedProject));
 
-                if (SelectedProject.Model.AllUsersIds != null && SelectedProject.Model.AllUsersIds.Count > 0)
+                if (SelectedProject?.Model.AllUsersIds != null && SelectedProject?.Model.AllUsersIds.Count > 0)
                 {
                     UsersProject = SelectedProject.Model.AllUsersIds?.Select(userId => _usersRequestService.GetUserById(_token, userId)).ToList();
                 }
@@ -95,6 +106,33 @@ namespace MyTaskManager.Client.ViewModels
                 RaisePropertyChanged(nameof(UsersProject));
             }
         }
+
+        public List<UserDto> NewUsersForSelectedProject
+        {
+            get => _usersRequestService.GetAllUsers(_token).Where(user => UsersProject.Any(u => user.Id == u.Id) == false).ToList();
+        }
+
+        private List<UserDto> _selectedUsersForProject = new List<UserDto>();
+
+        public List<UserDto> SelectedUsersForProject
+        {
+            get => _selectedUsersForProject;
+            set
+            {
+                _selectedUsersForProject = value;
+                RaisePropertyChanged(nameof(SelectedUsersForProject));
+            }
+        }
+        private UserDto _selectedUser;
+        public UserDto SelectedUser
+        {
+            get => _selectedUser;
+            set
+            {
+                _selectedUser = value;
+                RaisePropertyChanged(nameof(SelectedUser));
+            }
+        }
         #endregion
 
         #region METHODS
@@ -103,7 +141,7 @@ namespace MyTaskManager.Client.ViewModels
             ClientAction = ClientAction.Create;
             SelectedProject = new ModelClient<ProjectDto>(new ProjectDto());
             var wnd = new CreateOrUpdateProjectWindow();
-            _commonViewService.OpenWindow(wnd, this);
+            _viewService.OpenWindow(wnd, this);
         }
 
         private void UpdateNewProject(object projectId)
@@ -112,7 +150,7 @@ namespace MyTaskManager.Client.ViewModels
 
             ClientAction = ClientAction.Update;
             var wnd = new CreateOrUpdateProjectWindow();
-            _commonViewService.OpenWindow(wnd, this);
+            _viewService.OpenWindow(wnd, this);
         }
 
         private void ShowProjectInfo(object projectId)
@@ -144,40 +182,83 @@ namespace MyTaskManager.Client.ViewModels
             {
                 UpdateProject();
             }
-            UserProjects = GetProjectsToClient();
+            UpdatePage();
         }
 
         private void CreateProject()
         {
             var resultAction = _projectsRequestService.CreateProject(_token, SelectedProject.Model);
-            _commonViewService.ShowActionResult(resultAction, "New Project is created");
-            _commonViewService.CurrentOpenedWindow?.Close();
+            _viewService.ShowActionResult(resultAction, "New Project is created");
+            _viewService.CurrentOpenedWindow?.Close();
         }
 
         private void UpdateProject()
         {
             var resultAction = _projectsRequestService.UpdateProject(_token, SelectedProject.Model);
-            _commonViewService.ShowActionResult(resultAction, "New Project is updated");
-            _commonViewService.CurrentOpenedWindow?.Close();
+            _viewService.ShowActionResult(resultAction, "New Project is updated");
+            _viewService.CurrentOpenedWindow?.Close();
         }
 
         private void DeleteProject()
         {
             var resultAction = _projectsRequestService.DeleteProject(_token, SelectedProject.Model.Id);
-            _commonViewService.ShowActionResult(resultAction, "New Project is deleted");
-            UserProjects = GetProjectsToClient();
-            _commonViewService.CurrentOpenedWindow?.Close();
+            _viewService.ShowActionResult(resultAction, "New Project is deleted");
+            UpdatePage();
+            _viewService.CurrentOpenedWindow?.Close();
         }
 
         private List<ModelClient<ProjectDto>> GetProjectsToClient()
         {
+            _viewService.CurrentOpenedWindow?.Close();
             return _projectsRequestService.GetAllProjects(_token).Select(project => new ModelClient<ProjectDto>(project)).ToList();
         }
 
         private void SelectPhotoForProject()
         {
-            _commonViewService.SetPhotoForObject(SelectedProject.Model);
+            _viewService.SetPhotoForObject(SelectedProject.Model);
             SelectedProject = new ModelClient<ProjectDto>(SelectedProject.Model);
+        }
+
+        private void AddUsersToProject()
+        {
+            if (SelectedUsersForProject == null || SelectedUsersForProject?.Count == 0)
+            {
+                _viewService.ShowMessage("No selected users!");
+                return;
+            }
+
+            var resultAction = _projectsRequestService.AddUsersToProject(_token, SelectedProject.Model.Id, SelectedUsersForProject.Select(user => user.Id).ToList());
+            _viewService.ShowActionResult(resultAction, "New users are added to project");
+            UpdatePage();
+        }
+
+        private void OpenUsersToProject()
+        {
+            var wnd = new AddUsersToProjectWindow();
+            _viewService.OpenWindow(wnd, this);
+        }
+
+        private void UpdatePage()
+        {
+            UserProjects = GetProjectsToClient();
+            SelectedProject = null;
+            SelectedUsersForProject = new List<UserDto>();
+        }
+
+        private void DeleteUserFromProject(object paremeter)
+        {
+            if (paremeter is UserDto user)
+            {
+                SelectedUsersForProject.Add(user);
+                var resultAction = _projectsRequestService
+                    .RemoveUsersFromProject(_token, SelectedProject.Model.Id, SelectedUsersForProject.Select(user => user.Id).ToList());
+
+                _viewService.ShowActionResult(resultAction, "New users are deleted to project");
+
+                UsersProject.Remove(user);
+
+                UpdatePage();
+            }
         }
         #endregion
     }

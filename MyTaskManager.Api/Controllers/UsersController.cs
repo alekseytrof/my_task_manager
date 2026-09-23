@@ -7,7 +7,7 @@ using MyTaskManager.Common.Models;
 
 namespace MyTaskManager.Api.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
@@ -28,6 +28,7 @@ namespace MyTaskManager.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult CreateUser([FromBody] UserDto userModel)
         {
             if (userModel != null)
@@ -39,6 +40,7 @@ namespace MyTaskManager.Api.Controllers
         }
 
         [HttpPatch("{id}")]
+        [Authorize(Roles = "Admin")]
         public IActionResult UpdateUser(int id, [FromBody] UserDto userModel)
         {
             if (userModel != null)
@@ -64,6 +66,7 @@ namespace MyTaskManager.Api.Controllers
         }
 
         [HttpPost("all")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateMultiplyUsers([FromBody] List<UserDto> users)
         {
             if (users != null && users.Count > 1)
