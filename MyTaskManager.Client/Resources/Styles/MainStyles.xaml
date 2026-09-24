@@ -101,4 +101,9 @@
     <Style TargetType="Border" x:Key="deskPanelBorder" BasedOn="{StaticResource commonPanelBorder}">
         <Setter Property="Background" Value="#edfff2"/>
     </Style>
+
+    <Style TargetType="CheckBox" x:Key="commonChBox">
+        <Setter Property="BorderBrush" Value="{StaticResource commomBlueColor}"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
 </ResourceDictionary>

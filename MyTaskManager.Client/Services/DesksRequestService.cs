@@ -45,7 +45,7 @@ namespace MyTaskManager.Client.Services
             return SendDataByUrl(HttpMethod.Patch, _desksConrollerUrl + $"/{desk.Id}", token, deskJson);
         }
 
-        public HttpStatusCode DeleteDeskById(AuthToken token, int deskId)
+        public HttpStatusCode DeleteDesk(AuthToken token, int deskId)
         {
             return DeleteDataByUrl(_desksConrollerUrl + $"/{deskId}", token);
         }

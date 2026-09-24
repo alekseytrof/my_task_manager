@@ -42,7 +42,7 @@ namespace MyTaskManager.Client.ViewModels
             UpdatePage();
 
             OpenNewProjectCommand = new DelegateCommand(OpenNewProject);
-            OpenUpdateProjectCommand = new DelegateCommand<object>(UpdateNewProject);
+            OpenUpdateProjectCommand = new DelegateCommand<object>(OpenUpdateProject);
             ShowProjectInfoCommand = new DelegateCommand<object>(ShowProjectInfo);
             CreateOrUpdateProjectCommand = new DelegateCommand(CreateOrUpdateProject);
             DeleteProjectCommand = new DelegateCommand(DeleteProject);
@@ -150,7 +150,7 @@ namespace MyTaskManager.Client.ViewModels
             _viewService.OpenWindow(wnd, this);
         }
 
-        private void UpdateNewProject(object projectId)
+        private void OpenUpdateProject(object projectId)
         {
             SelectedProject = GetProjectClientById(projectId);
 
