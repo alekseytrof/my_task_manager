@@ -9,6 +9,8 @@ namespace MyTaskManager.Client.Services
     {
         private string _imageDialogFilterPattern = "Image files (*.jpg, *.jpeg, *.jpe, *.jfif, *.png) | *.jpg; *.jpeg; *.jpe; *.jfif; *.png";
 
+        public CommonViewService() { }
+
         public Window CurrentOpenedWindow { get; private set; }
         public void ShowMessage(string message)
         {

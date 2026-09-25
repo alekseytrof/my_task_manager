@@ -10,6 +10,12 @@ namespace MyTaskManager.Client.Services
     public abstract class CommonRequestService
     {
         public const string HOST = "http://localhost:5052/api/";
+        private CommonViewService _viewService;
+
+        public CommonRequestService()
+        {
+            _viewService = new CommonViewService();
+        }
 
         protected string GetDataByUrl(HttpMethod method, string url, AuthToken token, string userName = null, string password = null, Dictionary<string, string> parameters = null)
         {
@@ -40,7 +46,14 @@ namespace MyTaskManager.Client.Services
             }
             else if (method == HttpMethod.Get)
             {
-                data = client.DownloadData(url);
+                try
+                {
+                    data = client.DownloadData(url);
+                }
+                catch (Exception ex)
+                {
+                    _viewService.ShowMessage(ex.Message);
+                }
             }
 
             return UnicodeEncoding.UTF8.GetString(data);

@@ -139,7 +139,8 @@ namespace MyTaskManager.Client.ViewModels
 
         private void OpenDesksPage()
         {
-            _viewService.ShowMessage(_userDesksBtnName);
+            var page = new UserDesksPage();
+            OpenPage(page, _userDesksBtnName, new UserDesksPageViewModel(Token));
         }
 
         private void OpenTasksPage()
