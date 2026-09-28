@@ -272,7 +272,7 @@ namespace MyTaskManager.Client.ViewModels
             if (SelectedProject?.Model != null)
             {
                 var page = new ProjectDesksPage();
-                _mainWindowViewModel.OpenPage(page, $"Desks of {SelectedProject.Model.Name}", new ProjectDesksPageViewModel(_token, SelectedProject.Model));
+                _mainWindowViewModel.OpenPage(page, $"Desks of {SelectedProject.Model.Name}", new ProjectDesksPageViewModel(_token, SelectedProject.Model, _mainWindowViewModel));
             }
         }
         #endregion

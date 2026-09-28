@@ -1,6 +1,7 @@
 ﻿using MyTaskManager.Client.Models;
 using MyTaskManager.Client.Services;
 using MyTaskManager.Client.Views.AddWindows;
+using MyTaskManager.Client.Views.Pages;
 using MyTaskManager.Common.Models;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -14,6 +15,7 @@ namespace MyTaskManager.Client.ViewModels
         private DesksRequestService _desksRequestService;
         private UsersRequestService _usersRequestService;
         private DeskViewService _deskViewService;
+        private MainWindowViewModel _mainWindowViewModel;
 
         #region COMMANDS
         public DelegateCommand OpenNewDeskCommand { get; private set; }
@@ -23,10 +25,11 @@ namespace MyTaskManager.Client.ViewModels
         public DelegateCommand SelectPhotoForDeskCommand { get; private set; }
         public DelegateCommand AddNewColumnItemCommand { get; private set; }
         public DelegateCommand<object> RemoveColumnItemCommand { get; private set; }
+        public DelegateCommand<object> OpenDeskTasksPageCommand { get; private set; }
 
         #endregion
 
-        public ProjectDesksPageViewModel(AuthToken token, ProjectDto project)
+        public ProjectDesksPageViewModel(AuthToken token, ProjectDto project, MainWindowViewModel mainWindowViewModel)
         {
             Token = token;
             Project = project;
@@ -34,6 +37,7 @@ namespace MyTaskManager.Client.ViewModels
             _desksRequestService = new DesksRequestService();
             _usersRequestService = new UsersRequestService();
             _deskViewService = new DeskViewService(Token, _desksRequestService, _viewService);
+            _mainWindowViewModel = mainWindowViewModel;
             ProjectDesks = _deskViewService.GetDesks(project.Id);
 
             UpdatePage();
@@ -45,6 +49,7 @@ namespace MyTaskManager.Client.ViewModels
             SelectPhotoForDeskCommand = new DelegateCommand(SelectPhotoForDesk);
             AddNewColumnItemCommand = new DelegateCommand(AddNewColumnItem);
             RemoveColumnItemCommand = new DelegateCommand<object>(RemoveColumnItem);
+            OpenDeskTasksPageCommand = new DelegateCommand<object>(OpenDeskTasksPage);
         }
 
         #region PROPERTIES
@@ -209,6 +214,14 @@ namespace MyTaskManager.Client.ViewModels
             ColumnsForNewDesk = new ObservableCollection<ColumnBindingHelp>(SelectedDesk.Model.Columns.Select(c => new ColumnBindingHelp(c)));
 
             _deskViewService.OpenViewDeskInfo(deskId, this);
+        }
+
+        private void OpenDeskTasksPage(object deskId)
+        {
+            SelectedDesk = _deskViewService.GetDeskClientById(deskId);
+            var page = new DeskTasksPage();
+            var context = new DeskTasksPageViewModel(Token, SelectedDesk.Model, page);
+            _mainWindowViewModel.OpenPage(page, $"Tasks of {SelectedDesk.Model.Name}", context);
         }
         #endregion
     }

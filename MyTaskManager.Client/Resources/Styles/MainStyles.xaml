@@ -3,6 +3,7 @@
     <Brush x:Key="commomBlueColor">#0696d7</Brush>
     <Brush x:Key="commomRedColor">Red</Brush>
     <Brush x:Key="commomGrayColor">#FF8D8D8D</Brush>
+    <Brush x:Key="blueColor">#bddeff</Brush>
     <FontStyle x:Key="commonFontStyle">Normal</FontStyle>
 
     <Style TargetType="TextBox" x:Key="commonTBox">
@@ -100,6 +101,13 @@
 
     <Style TargetType="Border" x:Key="deskPanelBorder" BasedOn="{StaticResource commonPanelBorder}">
         <Setter Property="Background" Value="#edfff2"/>
+    </Style>
+
+    <Style TargetType="Border" x:Key="tasksPanelBorder" BasedOn="{StaticResource commonPanelBorder}">
+        <Setter Property="Background" Value="{StaticResource blueColor}"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Margin" Value="0, 10"/>
+        <Setter Property="Padding" Value="0"/>
     </Style>
 
     <Style TargetType="CheckBox" x:Key="commonChBox">
