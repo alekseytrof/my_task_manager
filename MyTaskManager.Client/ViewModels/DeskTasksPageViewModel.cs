@@ -17,6 +17,7 @@ namespace MyTaskManager.Client.ViewModels
         private DeskDto _desk;
         private UsersRequestService _usersRequestService;
         private TasksRequestService _tasksRequestService;
+        private ProjectsRequestService _projectsRequestService;
         private CommonViewService _viewService;
         private DeskTasksPage _page;
 
@@ -34,6 +35,7 @@ namespace MyTaskManager.Client.ViewModels
             _viewService = new CommonViewService();
             _usersRequestService = new UsersRequestService();
             _tasksRequestService = new TasksRequestService();
+            _projectsRequestService = new ProjectsRequestService();
             _page = page;
 
             TaskByColumns = GetTasksByColumns(_desk.Id);
@@ -78,6 +80,27 @@ namespace MyTaskManager.Client.ViewModels
                 RaisePropertyChanged(nameof(ClientAction));
             }
         }
+
+        private UserDto _selectedTaskExecutor;
+        public UserDto SelectedTaskExecutor
+        {
+            get => _selectedTaskExecutor;
+            set
+            {
+                _selectedTaskExecutor = value;
+                RaisePropertyChanged(nameof(SelectedTaskExecutor));
+            }
+        }
+
+        private ProjectDto Project
+        {
+            get => _projectsRequestService.GetProjectById(_token, _desk.ProjectId);
+        }
+
+        public List<UserDto> AllProjectUsers
+        {
+            get => Project?.AllUsersIds?.Select(userId => _usersRequestService.GetUserById(_token, userId)).ToList();
+        }
         #endregion
 
         #region METHODS
@@ -89,8 +112,17 @@ namespace MyTaskManager.Client.ViewModels
             {
                 tasksByColumns.Add(column, allTasks
                     .Where(t => t.Column == column)
-                    .Select(t => new TaskClient(t))
-                    .ToList());
+                    .Select(t =>
+                    {
+                        var tV = new TaskClient(t);
+                        tV.Creator = _usersRequestService.GetCurrentUser(_token);
+                        if (t.ExecutorId != null)
+                        {
+                            tV.Executor = _usersRequestService.GetUserById(_token, (int)t.ExecutorId);
+                        }
+                        return tV;
+                    }
+            ).ToList());
             }
             return tasksByColumns;
         }
@@ -111,6 +143,7 @@ namespace MyTaskManager.Client.ViewModels
         private void CreateTask()
         {
             SelectedTask.Model.DeskId = _desk.Id;
+            SelectedTask.Model.ExecutorId = SelectedTaskExecutor.Id;
             SelectedTask.Model.Column = _desk.Columns.FirstOrDefault();
 
             var resultAction = _tasksRequestService.CreateTask(_token, SelectedTask.Model);

@@ -27,14 +27,14 @@
                 <StackPanel Grid.Row="2" Orientation="Horizontal">
                     <TextBlock Text="Creator: "
                                Style="{StaticResource commonTBlock}"/>
-                    <TextBlock Text="{Binding Path=Model.Creator}"
+                    <TextBlock Text="{Binding Path=Creator}"
                                Style="{StaticResource commonTBlock}"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="3" Orientation="Horizontal">
                     <TextBlock Text="Executor: "
                                Style="{StaticResource commonTBlock}"/>
-                    <TextBlock Text="{Binding Path=Model.Executor}"
+                    <TextBlock Text="{Binding Path=Executor}"
                                Style="{StaticResource commonTBlock}"/>
                 </StackPanel>
 
