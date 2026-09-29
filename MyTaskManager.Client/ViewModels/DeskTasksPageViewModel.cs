@@ -1,14 +1,11 @@
 ﻿using MyTaskManager.Client.Models;
 using MyTaskManager.Client.Services;
+using MyTaskManager.Client.Views.AddWindows;
 using MyTaskManager.Client.Views.Components;
 using MyTaskManager.Client.Views.Pages;
 using MyTaskManager.Common.Models;
+using Prism.Commands;
 using Prism.Mvvm;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -16,17 +13,23 @@ namespace MyTaskManager.Client.ViewModels
 {
     public class DeskTasksPageViewModel : BindableBase
     {
-        private AuthToken _authToken;
+        private AuthToken _token;
         private DeskDto _desk;
         private UsersRequestService _usersRequestService;
         private TasksRequestService _tasksRequestService;
         private CommonViewService _viewService;
-
         private DeskTasksPage _page;
+
+        #region COMMAND
+        public DelegateCommand OpenNewTaskCommand { get; private set; }
+        public DelegateCommand OpenUpdateTaskCommand { get; private set; }
+        public DelegateCommand CreateOrUpdateTaskCommand { get; private set; }
+        public DelegateCommand DeleteTaskCommand { get; private set; }
+        #endregion
 
         public DeskTasksPageViewModel(AuthToken authToken, DeskDto desk, DeskTasksPage page)
         {
-            _authToken = authToken;
+            _token = authToken;
             _desk = desk;
             _viewService = new CommonViewService();
             _usersRequestService = new UsersRequestService();
@@ -35,10 +38,14 @@ namespace MyTaskManager.Client.ViewModels
 
             TaskByColumns = GetTasksByColumns(_desk.Id);
             _page.TasksGrid.Children.Add(CreateTasksGrid());
+            OpenNewTaskCommand = new DelegateCommand(OpenNewTask);
+            OpenUpdateTaskCommand = new DelegateCommand(OpenUpdateTask);
+            CreateOrUpdateTaskCommand = new DelegateCommand(CreateOrUpdateTask);
+            DeleteTaskCommand = new DelegateCommand(DeleteTask);
         }
 
 
-        #region
+        #region PROPERTIES
         private Dictionary<string, List<TaskClient>> _taskByColumns = new Dictionary<string, List<TaskClient>>();
         public Dictionary<string, List<TaskClient>> TaskByColumns
         {
@@ -49,13 +56,35 @@ namespace MyTaskManager.Client.ViewModels
                 RaisePropertyChanged(nameof(TaskByColumns));
             }
         }
+
+        private TaskClient _selectedTask;
+        public TaskClient SelectedTask
+        {
+            get => _selectedTask;
+            set
+            {
+                _selectedTask = value;
+                RaisePropertyChanged(nameof(SelectedTask));
+            }
+        }
+
+        private ClientAction _clientAction;
+        public ClientAction ClientAction
+        {
+            get => _clientAction;
+            set
+            {
+                _clientAction = value;
+                RaisePropertyChanged(nameof(ClientAction));
+            }
+        }
         #endregion
 
         #region METHODS
         private Dictionary<string, List<TaskClient>> GetTasksByColumns(int deskId)
         {
             var tasksByColumns = new Dictionary<string, List<TaskClient>>();
-            var allTasks = _tasksRequestService.GetTaskByDesk(_authToken, deskId);
+            var allTasks = _tasksRequestService.GetTaskByDesk(_token, deskId);
             foreach (var column in _desk.Columns)
             {
                 tasksByColumns.Add(column, allTasks
@@ -64,6 +93,64 @@ namespace MyTaskManager.Client.ViewModels
                     .ToList());
             }
             return tasksByColumns;
+        }
+
+        private void CreateOrUpdateTask()
+        {
+            if (ClientAction == ClientAction.Create)
+            {
+                CreateTask();
+            }
+            if (ClientAction == ClientAction.Update)
+            {
+                UpdateTask();
+            }
+            UpdatePage();
+        }
+
+        private void CreateTask()
+        {
+            SelectedTask.Model.DeskId = _desk.Id;
+            SelectedTask.Model.Column = _desk.Columns.FirstOrDefault();
+
+            var resultAction = _tasksRequestService.CreateTask(_token, SelectedTask.Model);
+            _viewService.ShowActionResult(resultAction, "New Task is created");
+        }
+
+        private void UpdateTask()
+        {
+            _tasksRequestService.UpdateTask(_token, SelectedTask.Model);
+        }
+
+        private void DeleteTask()
+        {
+            _tasksRequestService.DeleteTask(_token, SelectedTask.Model.Id);
+            UpdatePage();
+        }
+
+        private void UpdatePage()
+        {
+            SelectedTask = null;
+            TaskByColumns = GetTasksByColumns(_desk.Id);
+            _page.TasksGrid.Children.Add(CreateTasksGrid());
+            _viewService.CurrentOpenedWindow?.Close();
+        }
+
+        private void OpenNewTask()
+        {
+            ClientAction = ClientAction.Create;
+
+            SelectedTask = new TaskClient(new TaskDto());
+
+            var wnd = new CreateOrUpdateTaskWindow();
+            _viewService.OpenWindow(wnd, this);
+        }
+
+        private void OpenUpdateTask()
+        {
+            ClientAction = ClientAction.Update;
+            var wnd = new CreateOrUpdateTaskWindow();
+            _viewService.OpenWindow(wnd, this);
         }
 
         private Grid CreateTasksGrid()
