@@ -101,6 +101,18 @@ namespace MyTaskManager.Client.ViewModels
         {
             get => Project?.AllUsersIds?.Select(userId => _usersRequestService.GetUserById(_token, userId)).ToList();
         }
+
+        private string _selectedColumnName;
+        public string SelectedColumnName
+        {
+            get => _selectedColumnName;
+            set
+            {
+                _selectedColumnName = value;
+                RaisePropertyChanged(nameof(SelectedColumnName));
+            }
+        }
+
         #endregion
 
         #region METHODS
@@ -220,12 +232,27 @@ namespace MyTaskManager.Client.ViewModels
                 ItemsControl columnControl = new ItemsControl();
                 Grid.SetRow(columnControl, 1);
                 Grid.SetColumn(columnControl, columnCount);
+                columnControl.Style = resource["tasksColumnPanel"] as Style;
+                columnControl.Tag = column.Key;
+
+                columnControl.MouseEnter += new System.Windows.Input.MouseEventHandler((sender, e) =>
+                {
+                    GetSelectedColumn(sender);
+                });
+                columnControl.MouseLeftButtonUp += new System.Windows.Input.MouseButtonEventHandler((sender, e) =>
+                {
+                    SendTaskToNewColumn();
+                });
 
                 var taskViews = new List<TaskControl>();
 
                 foreach (var task in column.Value)
                 {
                     var taskView = new TaskControl(task);
+                    taskView.MouseDown += new System.Windows.Input.MouseButtonEventHandler((sender, e) =>
+                    {
+                        SelectedTask = task;
+                    });
                     taskViews.Add(taskView);
                 }
 
@@ -234,8 +261,23 @@ namespace MyTaskManager.Client.ViewModels
 
                 columnCount++;
             }
-
             return grid;
+        }
+
+        private void GetSelectedColumn(object senderControl)
+        {
+            SelectedColumnName = ((ItemsControl)senderControl).Tag.ToString();
+        }
+
+        private void SendTaskToNewColumn()
+        {
+            if (SelectedTask != null && SelectedTask.Model?.Column != SelectedColumnName)
+            {
+                SelectedTask.Model.Column = SelectedColumnName;
+                _tasksRequestService.UpdateTask(_token, SelectedTask.Model);
+                UpdatePage();
+                SelectedTask = null;
+            }
         }
         #endregion
     }
