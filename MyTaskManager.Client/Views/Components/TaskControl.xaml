@@ -8,7 +8,7 @@
              d:DesignHeight="200" 
              d:DesignWidth="200">
     <Grid>
-        <Border Style="{StaticResource tasksPanelBorder}">
+        <Border Style="{StaticResource taskPanelBorder}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>

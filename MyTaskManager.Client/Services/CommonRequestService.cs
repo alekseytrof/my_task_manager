@@ -40,21 +40,15 @@ namespace MyTaskManager.Client.Services
 
             byte[] data = Array.Empty<byte>();
 
-            if (method == HttpMethod.Post)
+            try
             {
-                data = client.UploadValues(url, method.Method, client.QueryString);
-            }
-            else if (method == HttpMethod.Get)
-            {
-                try
-                {
+                if (method == HttpMethod.Post)
+                    data = client.UploadValues(url, method.Method, client.QueryString);
+
+                if (method == HttpMethod.Get)
                     data = client.DownloadData(url);
-                }
-                catch (Exception ex)
-                {
-                    _viewService.ShowMessage(ex.Message);
-                }
             }
+            catch { }
 
             return UnicodeEncoding.UTF8.GetString(data);
         }

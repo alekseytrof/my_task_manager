@@ -143,5 +143,11 @@ namespace MyTaskManager.Api.Models.Services
                 yield return user;
             }
         }
+
+        public ProjectAdmin GetProjectAdmin(int userId)
+        {
+            ProjectAdmin admin = _db.ProjectAdmins.FirstOrDefault(a => a.UserId == userId);
+            return admin;
+        }
     }
 }

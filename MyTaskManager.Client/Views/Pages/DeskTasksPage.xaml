@@ -15,6 +15,13 @@
         </Grid.RowDefinitions>
         <Button Content="New task" Command="{Binding OpenNewTaskCommand}"
                 Style="{StaticResource commonBtn}"/>
-        <Grid Grid.Row="1" x:Name="tasksGrid"/>
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0" x:Name="tasksGrid"/>
+            </Grid>
+        </ScrollViewer>
     </Grid>
 </Page>

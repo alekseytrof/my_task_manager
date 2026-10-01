@@ -1,10 +1,13 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Brush x:Key="commomBlueColor">#0696d7</Brush>
-    <Brush x:Key="commomRedColor">Red</Brush>
-    <Brush x:Key="commomGrayColor">#FF8D8D8D</Brush>
+    <Brush x:Key="commonBlueColor">#0696d7</Brush>
     <Brush x:Key="blueColor">#bddeff</Brush>
+    <Brush x:Key="commonRedColor">Red</Brush>
+    <Brush x:Key="commonGreenColor">Green</Brush>
+    <Brush x:Key="greenColor">#ddfcd7</Brush>
+    <Brush x:Key="commonGrayColor">#FF8D8D8D</Brush>
     <FontStyle x:Key="commonFontStyle">Normal</FontStyle>
+    <Brush x:Key="deskColumnMouseEnterColor">#adcbd9</Brush>
 
     <Style TargetType="TextBox" x:Key="commonTBox">
         <Setter Property="Height" Value="20"/>
@@ -13,7 +16,7 @@
         <Setter Property="HorizontalAlignment" Value="Stretch"/>
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="Margin" Value="0, 3"/>
+        <Setter Property="Margin" Value="0,3"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Style.Resources>
             <Style TargetType="{x:Type Border}">
@@ -35,18 +38,13 @@
         <Setter Property="HorizontalAlignment" Value="Stretch"/>
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="Margin" Value="0, 3"/>
+        <Setter Property="Margin" Value="0,3"/>
         <Setter Property="BorderThickness" Value="1"/>
-        <Style.Resources>
-            <Style TargetType="{x:Type Border}">
-                <Setter Property="CornerRadius" Value="3"/>
-            </Style>
-        </Style.Resources>
     </Style>
 
     <Style TargetType="Button" x:Key="commonBtn">
-        <Setter Property="Background" Value="{StaticResource commomBlueColor}"/>
-        <Setter Property="BorderBrush" Value="{StaticResource commomBlueColor}"/>
+        <Setter Property="Background" Value="{StaticResource commonBlueColor}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource commonBlueColor}"/>
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="Margin" Value="5"/>
@@ -59,7 +57,11 @@
     </Style>
 
     <Style TargetType="Button" x:Key="commonBtnRed" BasedOn="{StaticResource commonBtn}">
-        <Setter Property="Background" Value="{StaticResource commomRedColor}"/>
+        <Setter Property="Background" Value="{StaticResource commonRedColor}"/>
+    </Style>
+
+    <Style TargetType="Button" x:Key="commonBtnGreen" BasedOn="{StaticResource commonBtn}">
+        <Setter Property="Background" Value="{StaticResource commonGreenColor}"/>
     </Style>
 
     <Style TargetType="TextBlock" x:Key="sharedTBlock">
@@ -78,16 +80,16 @@
 
     <Style TargetType="GridSplitter" x:Key="commonSplitter">
         <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="BorderBrush" Value="{StaticResource commomGrayColor}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource commonGrayColor}"/>
         <Setter Property="Margin" Value="2"/>
     </Style>
 
     <Style TargetType="Border" x:Key="commonBorder">
-        <Setter Property="BorderBrush" Value="{StaticResource commomGrayColor}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource commonGrayColor}"/>
     </Style>
 
     <Style TargetType="Border" x:Key="commonPanelBorder">
-        <Setter Property="BorderBrush" Value="{StaticResource commomBlueColor}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource commonBlueColor}"/>
         <Setter Property="Margin" Value="10"/>
         <Setter Property="Padding" Value="10"/>
         <Setter Property="BorderThickness" Value="1"/>
@@ -103,20 +105,29 @@
         <Setter Property="Background" Value="#edfff2"/>
     </Style>
 
-    <Style TargetType="Border" x:Key="tasksPanelBorder" BasedOn="{StaticResource commonPanelBorder}">
+    <Style TargetType="Border" x:Key="taskPanelBorder" BasedOn="{StaticResource commonPanelBorder}">
         <Setter Property="Background" Value="{StaticResource blueColor}"/>
         <Setter Property="Cursor" Value="Hand"/>
-        <Setter Property="Margin" Value="0, 10"/>
+        <Setter Property="Margin" Value="0,10"/>
         <Setter Property="Padding" Value="0"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource greenColor}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style TargetType="Border" x:Key="userBorderPanel" BasedOn="{StaticResource commonPanelBorder}">
+        <Setter Property="Width" Value="Auto"/>
     </Style>
 
     <Style TargetType="CheckBox" x:Key="commonChBox">
-        <Setter Property="BorderBrush" Value="{StaticResource commomBlueColor}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource commonBlueColor}"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>
 
     <Style TargetType="ItemsControl" x:Key="tasksColumnPanel">
-        <Setter Property="Background" Value="{StaticResource commomGrayColor}"/>
+        <Setter Property="Background" Value="{StaticResource blueColor}"/>
         <Setter Property="Margin" Value="5"/>
         <Setter Property="BorderBrush" Value="Gray"/>
         <Setter Property="BorderThickness" Value="1"/>
@@ -125,10 +136,10 @@
                 <Setter Property="CornerRadius" Value="3"/>
             </Style>
         </Style.Resources>
-        <Style.Triggers>
+        <!--<Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="Aqua"/>
+                <Setter Property="Background" Value="{StaticResource deskColumnMouseEnterColor}"/>
             </Trigger>
-        </Style.Triggers>
+        </Style.Triggers>-->
     </Style>
 </ResourceDictionary>
