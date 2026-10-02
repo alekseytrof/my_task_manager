@@ -103,10 +103,15 @@ MyTaskManager helps you organize your work using **projects**, **boards**, **col
 ## 🏗 Architecture
 
 The solution contains two main projects:
+
 MyTaskManager.sln
+
 │
+
 ├── MyTaskManager.Server → REST API backend (data storage, authentication)
+
 └── MyTaskManager.Client → WPF desktop application (UI)
+
 The **client** communicates with the **server** over HTTP using a REST API.
 
 ---
@@ -137,7 +142,9 @@ The **client** communicates with the **server** over HTTP using a REST API.
 ---
 
 ## 👤 Author
+
 Aleksey Trofimov
 
 GitHub: @alekseytrof
+
 Email: alekcey.trofimov.99@mail.ru
