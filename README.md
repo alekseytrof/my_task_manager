@@ -64,12 +64,9 @@ color tags would improve visual differentiation.*
 
 ### 4. Desks Window
 
-<!--
-  PHOTO HERE — Boards view
-  Description: Displays boards belonging to the selected project.
-  Design rating: ★★★★☆ — consistent with the projects view;
-  consider a card-based layout for better visual appeal.
--->
+<img width="597" height="390" alt="Image" src="https://github.com/user-attachments/assets/eb609888-e7ac-4556-9695-bb1f32a233b7" />
+
+*Displays desks belonging to the selected project.*
 
 ### 5. Columns & Tasks Window
 
