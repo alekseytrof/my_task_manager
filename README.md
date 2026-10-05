@@ -42,6 +42,7 @@ MyTaskManager helps you organize your work using **projects**, **boards**, **col
 ### 1. Registration / Login Window
 
 ![Login window]([https://github.com/user/repo/assets/12345/abcd-1234](https://github.com/alekseytrof/my_task_manager/issues/1#issue-5708112518))
+<img width="382" height="289" alt="Image" src="https://github.com/user-attachments/assets/36e23d56-f345-4e9c-81a3-d60a50bf65b7" />
 
 Description: Displays the login form with fields for username and password,
 
