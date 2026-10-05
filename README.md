@@ -47,13 +47,11 @@ MyTaskManager helps you organize your work using **projects**, **boards**, **col
 
 ### 2. Main Window
 
-<!--
-  PHOTO HERE — Main window
-  Description: The central hub of the application, with tabs for Projects,
-  Boards, Tasks (and Users for administrators), plus an Exit button.
-  Design rating: ★★★★★ — a well-structured layout with clear navigation;
-  the tabbed interface makes switching between sections fast and intuitive.
--->
+<img width="478" height="257" alt="Image" src="https://github.com/user-attachments/assets/0b516a50-fc13-4b82-9d8c-ab62e2b61647" />
+  
+*The central hub of the application, with tabs for Projects,
+Boards, Tasks (and Users for administrators), plus an Exit button. A well-structured layout with clear navigation;
+the tabbed interface makes switching between sections fast and intuitive.*
 
 ### 3. Projects Window
 
