@@ -70,13 +70,12 @@ color tags would improve visual differentiation.*
 
 ### 5. Columns & Tasks Window
 
-<!--
-  PHOTO HERE — Columns and tasks (Kanban-style) view
-  Description: The core workspace — columns containing tasks that can be
-  freely dragged and dropped between them.
-  Design rating: ★★★★★ — the Kanban-style drag-and-drop interaction is the
-  standout feature; smooth animations would make it even better.
--->
+<img width="1029" height="431" alt="Image" src="https://github.com/user-attachments/assets/01b9c9fe-ccc0-4b36-ae28-0e8c9fbc4521" />
+  
+*The core workspace — columns containing tasks that can be
+freely dragged and dropped between them.
+The Kanban-style drag-and-drop interaction is the
+standout feature; smooth animations would make it even better.*
 
 ### 6. User Management Window (Admin only)
 
