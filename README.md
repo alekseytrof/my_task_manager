@@ -55,15 +55,14 @@ the tabbed interface makes switching between sections fast and intuitive.*
 
 ### 3. Projects Window
 
-<!--
-  PHOTO HERE — Projects view
-  Description: Shows all available projects and allows creating, editing,
-  and deleting them.
-  Design rating: ★★★★☆ — functional and clear; adding project icons or
-  color tags would improve visual differentiation.
--->
+<img width="622" height="372" alt="Image" src="https://github.com/user-attachments/assets/cbef664f-0945-47cc-a8b2-773a8253df2c" />
 
-### 4. Boards Window
+*Shows all available projects and allows creating, editing,
+and deleting them.
+Functional and clear; adding project icons or
+color tags would improve visual differentiation.*
+
+### 4. Desks Window
 
 <!--
   PHOTO HERE — Boards view
