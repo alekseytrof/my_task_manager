@@ -9,6 +9,7 @@
         WindowStartupLocation="CenterScreen"
         mc:Ignorable="d"
         Title="Login"
+        Icon="/Resources/icon.ico"
         Height="300" Width="400"
         ResizeMode="NoResize"
         Name ="window"
@@ -22,10 +23,10 @@
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Center"
                     Width="250">
-            <TextBox Text="{Binding UserLogin}" Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                     Margin="0,3"/>
-            <PasswordBox x:Name="UserPassword" Style="{DynamicResource MaterialDesignOutlinedPasswordBox}"
-                     Margin="0,3"/>
+            <TextBlock Text="Login" Style="{StaticResource MaterialDesignBodySmallTextBlock}"/>
+            <TextBox Text="{Binding UserLogin}" Style="{DynamicResource MaterialDesignOutlinedTextBox}"/>
+            <TextBlock Text="Password" Style="{StaticResource MaterialDesignBodySmallTextBlock}" Margin="0,5,0,0"/>
+            <PasswordBox x:Name="UserPassword" Style="{DynamicResource MaterialDesignOutlinedPasswordBox}"/>
             <Button Content="OK" Command="{Binding GetUserFromDBCommand}"
                     CommandParameter="{Binding ElementName=UserPassword}"
                     Style="{DynamicResource MaterialDesignRaisedButton}"
@@ -44,8 +45,9 @@
                     </Style.Triggers>
                 </Style>
             </StackPanel.Style>
-            <TextBlock Text="Предыдущий пользователь" Style="{StaticResource MaterialDesignButtonTextBlock}"
-                       Margin="5,0,0,0"/>
+            <TextBlock Text="Select last user"
+                       Style="{StaticResource MaterialDesignButtonTextBlock}"
+                       HorizontalAlignment="Center"/>
             <Button Content="{Binding CurrentUserCache.Login}"
                     Command="{Binding LoginFromCacheCommand}"
                     CommandParameter="{Binding ElementName=window}"

@@ -9,6 +9,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\icon.ico" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="EPPlus" Version="8.7.1" />
 		<PackageReference Include="MaterialDesignThemes" Version="5.3.2" />
 		<PackageReference Include="Newtonsoft.Json" Version="8.0.3" />
@@ -19,6 +23,12 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\MyTaskManager.Common.Models\MyTaskManager.Common.Models.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Resource Include="Resources\icon.ico">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
 	</ItemGroup>
 
 	<ItemGroup>
