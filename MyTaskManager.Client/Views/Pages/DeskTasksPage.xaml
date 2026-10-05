@@ -10,11 +10,10 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Button Content="New task" Command="{Binding OpenNewTaskCommand}"
-                Style="{StaticResource commonBtn}"/>
+        <Button Content="New task" Command="{Binding OpenNewTaskCommand}" Margin="5"/>
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
             <Grid>
                 <Grid.RowDefinitions>

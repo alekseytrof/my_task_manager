@@ -14,7 +14,7 @@
             <ListView.ContextMenu>
                 <ContextMenu ItemsSource="{Binding ContextMenuCommand}">
                     <ContextMenu.ItemTemplate>
-                        <DataTemplate>
+                        <DataTemplate >
                             <MenuItem Header="{Binding Key}" Command="{Binding Value}"/>
                         </DataTemplate>
                     </ContextMenu.ItemTemplate>

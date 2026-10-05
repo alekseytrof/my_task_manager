@@ -18,36 +18,32 @@
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="30"/>
                 </Grid.RowDefinitions>
-                <TextBlock Grid.Row="0"  Text="{Binding Path=Model.Name}"
-                           Style="{StaticResource commonTBlock}"/>
+                <TextBlock Grid.Row="0"  Text="{Binding Path=Model.Name}" HorizontalAlignment="Center" 
+                           Style="{StaticResource MaterialDesignBody1TextBlock}"/>
 
                 <TextBlock Grid.Row="1"  Text="{Binding Path=Model.Description}"
-                           Style="{StaticResource commonTBlock}"/>
+                           Style="{StaticResource MaterialDesignBodySmallTextBlock}"/>
 
                 <StackPanel Grid.Row="2" Orientation="Horizontal">
-                    <TextBlock Text="Creator: "
-                               Style="{StaticResource commonTBlock}"/>
-                    <TextBlock Text="{Binding Path=Creator}"
-                               Style="{StaticResource commonTBlock}"/>
+                    <TextBlock Text="Creator: "/>
+                    <TextBlock Text="{Binding Path=Creator}"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="3" Orientation="Horizontal">
-                    <TextBlock Text="Executor: "
-                               Style="{StaticResource commonTBlock}"/>
-                    <TextBlock Text="{Binding Path=Executor}"
-                               Style="{StaticResource commonTBlock}"/>
+                    <TextBlock Text="Executor: "/>
+                    <TextBlock Text="{Binding Path=Executor}"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="4" Orientation="Horizontal">
-                    <TextBlock Text="Start: "
-                               Style="{StaticResource commonTBlock}"/>
-                    <DatePickerTextBox Text="{Binding Path=Model.StartDate}" IsReadOnly="True"/>
+                    <TextBlock Text="Start: "/>
+                    <DatePickerTextBox Text="{Binding Path=Model.StartDate}" IsReadOnly="True" 
+                                       Style="{StaticResource MaterialDesignComboBoxEditableTextBox}"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="5" Orientation="Horizontal">
-                    <TextBlock Text="End: "
-               Style="{StaticResource commonTBlock}"/>
-                    <DatePickerTextBox Text="{Binding Path=Model.EndDate}" IsReadOnly="True"/>
+                    <TextBlock Text="End: "/>
+                    <DatePickerTextBox Text="{Binding Path=Model.EndDate}" IsReadOnly="True" 
+                                       Style="{StaticResource MaterialDesignComboBoxEditableTextBox}"/>
                 </StackPanel>
             </Grid>
         </Border>

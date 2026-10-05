@@ -62,7 +62,7 @@ namespace MyTaskManager.Client.ViewModels
         private readonly string _userProjectsBtnName = "My projects";
         private readonly string _userDesksBtnName = "My desks";
         private readonly string _userTasksBtnName = "My tasks";
-        private readonly string _userInfoBtnName = "My info";
+        private readonly string _userInfoBtnName = "Info about me";
         private readonly string _logoutBtnName = "Logout";
 
         private readonly string _manageUsersBtnName = "Users";
@@ -163,7 +163,6 @@ namespace MyTaskManager.Client.ViewModels
 
         private void OpenUsersManagement()
         {
-            SelectedPageName = _manageUsersBtnName;
             var page = new UsersPage();
             OpenPage(page, _manageUsersBtnName, new UsersPageViewModel(Token));
         }

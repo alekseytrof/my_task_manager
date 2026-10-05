@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:MyTaskManager.Client.Views"
         WindowStartupLocation="CenterScreen"
         mc:Ignorable="d"
-        Title="MainWindow" 
+        Title="MyTaskManager" 
+        Icon="/Resources/icon.ico"
         Height="450" Width="1100"
         MinHeight="200" MinWidth="300">
     <Grid>
@@ -20,8 +21,8 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Button Command="{Binding Value}"
-                            Style="{StaticResource commonBtn}">
-                            <TextBlock Text="{Binding Key}" Style="{StaticResource commonTBlock}"/>
+                                Margin="2,0,5,2">
+                            <TextBlock Text="{Binding Key}" Style="{StaticResource MaterialDesignBodyMediumTextBlock}"/>
                         </Button>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
@@ -29,12 +30,13 @@
         </Grid>
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
+                <RowDefinition Height="40"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
-            <Border Grid.Row="0" BorderThickness="0,0,0,2" Style="{StaticResource commonBorder}"/>
-            <TextBlock Text="{Binding SelectedPageName}" Style="{StaticResource headerTBlock}"/>
+            <Border BorderThickness="0,0,0,2" Style="{StaticResource commonBorder}"/>
+            <TextBlock Text="{Binding SelectedPageName}"
+                       Style="{StaticResource MaterialDesignTitleLargeTextBlock}"
+                       HorizontalAlignment="Center"/>
             <Frame Grid.Row="1" NavigationUIVisibility="Hidden" Content="{Binding SelectedPage}"/>
         </Grid>
 

@@ -14,14 +14,15 @@
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
 
+        <Border BorderThickness="0,0,2,0" Style="{StaticResource commonBorder}"/>
         <Grid Grid.Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Button Content="New project" Command="{Binding OpenNewProjectCommand}">
+            <Button Content="New project" Command="{Binding OpenNewProjectCommand}" Margin="5">
                 <Button.Style>
-                    <Style TargetType="Button" BasedOn="{StaticResource commonBtn}">
+                    <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedButton}">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding CurrentUser.Status}" Value="User">
                                 <Setter Property="IsEnabled" Value="False"/>
@@ -32,7 +33,7 @@
                     </Style>
                 </Button.Style>
             </Button>
-            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="5">
                 <ItemsControl ItemsSource="{Binding UserProjects}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -47,11 +48,13 @@
                                                Style="{StaticResource commonTBlock}"/>
                                     <Image Source="{Binding Path=Image}" Width="100" Height="100"/>
                                     <Button Content="Open" Command="{Binding Path=DataContext.ShowProjectInfoCommand,
-                                        RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                            CommandParameter="{Binding Path=Model.Id}"/>
+                                            RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                            CommandParameter="{Binding Path=Model.Id}"
+                                            Margin="2"/>
                                     <Button Content="Edit" Command="{Binding Path=DataContext.OpenUpdateProjectCommand,
-                                        RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                            CommandParameter="{Binding Path=Model.Id}"/>
+                                            RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                            CommandParameter="{Binding Path=Model.Id}"
+                                            Margin="2"/>
                                 </StackPanel>
                             </Border>
                         </DataTemplate>
@@ -60,7 +63,7 @@
             </ScrollViewer>
         </Grid>
 
-        <Grid Grid.Column="1" Width="200">
+        <Grid Grid.Column="1" Width="200" Margin="5">
             <Grid.Style>
                 <Style TargetType="Grid">
                     <Style.Triggers>
@@ -74,17 +77,17 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="30"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" Text="{Binding SelectedProject.Model.Name}"
                        Style="{StaticResource headerTBlock}"/>
             <TextBlock Grid.Row="1" Text="{Binding SelectedProject.Model.Description}"
                        TextWrapping="Wrap"
-                        Style="{StaticResource commonTBlock}"/>
+                       Margin="5"/>
             <Button Grid.Row="2" Content="Add users" Command="{Binding OpenUsersToProjectCommand}">
                 <Button.Style>
-                    <Style TargetType="Button">
+                    <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedButton}">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding CurrentUser.Status}" Value="User">
                                 <Setter Property="IsEnabled" Value="False"/>
@@ -95,7 +98,9 @@
                     </Style>
                 </Button.Style>
             </Button>
-            <Button Grid.Row="3" Content="Desks" Command="{Binding OpenProjectDesksPageCommand}"/>
+            <Button Grid.Row="3" Content="Desks" Command="{Binding OpenProjectDesksPageCommand}" 
+                    Style="{StaticResource MaterialDesignRaisedButton}"
+                    Margin="0,2"/>
             <ListBox Grid.Row="4" 
                      ItemsSource="{Binding UsersProject}" 
                      SelectedItem="{Binding SelectedUser, Mode=OneWay}">
