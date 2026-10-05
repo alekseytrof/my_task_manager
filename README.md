@@ -4,13 +4,6 @@ A full-featured task management system built with **C# / WPF**, consisting of a 
 
 MyTaskManager helps you organize your work using **projects**, **boards**, **columns**, and **tasks**, with role-based access for regular users and administrators.
 
-<!--
-  PHOTO HERE — Main hero image / logo / banner
-  Description: A wide banner or logo of the project to give a first impression.
-  Design rating: ★★★★★ — a clean, branded hero image significantly improves
-  the perceived quality of the README and encourages users to keep reading.
--->
-
 ---
 
 ## 📋 Table of Contents
@@ -79,13 +72,12 @@ standout feature; smooth animations would make it even better.*
 
 ### 6. User Management Window (Admin only)
 
-<!--
-  PHOTO HERE — Users management view
-  Description: Available only to administrators. Allows viewing, editing,
-  and managing all registered users of the system.
-  Design rating: ★★★★☆ — good separation of admin functionality;
-  consider adding search and filtering for larger user lists.
--->
+<img width="631" height="419" alt="Image" src="https://github.com/user-attachments/assets/2537623a-77f5-437c-bf64-40fbc16dedd8" />
+
+*Available only to administrators. Allows viewing, editing,
+and managing all registered users of the system.
+Good separation of admin functionality;
+consider adding search and filtering for larger user lists.*
 
 ---
 
@@ -108,7 +100,7 @@ The **client** communicates with the **server** over HTTP using a REST API.
 ## ✅ Requirements
 
 - **Windows 10 / 11**
-- **.NET SDK** (version 8.0 or later)
+- **.NET SDK** (version 6.0 or later)
 - **Visual Studio 2022** (or any IDE that supports .NET and WPF)
 - **PostgreSQL**
 
@@ -122,7 +114,7 @@ The **client** communicates with the **server** over HTTP using a REST API.
 
 - ASP.NET Core Web API (server)
 
-- Entity Framework Core (data access — adjust if different)
+- Entity Framework Core
 
 - XAML (UI markup)
 
