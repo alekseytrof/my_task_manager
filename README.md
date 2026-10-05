@@ -41,13 +41,15 @@ MyTaskManager helps you organize your work using **projects**, **boards**, **col
 
 ### 1. Registration / Login Window
 
-<!--
-  PHOTO HERE — Login window
-  Description: Displays the login form with fields for username and password,
-  plus a "Login as last user" quick-access button.
-  Design rating: ★★★★☆ — a clean and minimal login screen; consider
-  adding your logo at the top for extra brand recognition.
--->
+![Login window]([https://github.com/user/repo/assets/12345/abcd-1234](https://github.com/alekseytrof/my_task_manager/issues/1#issue-5708112518))
+
+Description: Displays the login form with fields for username and password,
+
+plus a "Login as last user" quick-access button.
+
+A clean and minimal login screen; consider
+
+adding your logo at the top for extra brand recognition.
 
 ### 2. Main Window
 
